@@ -18,21 +18,22 @@ const About = () => {
           <div>
             <span className="text-primary font-semibold uppercase tracking-wider text-sm">O nas</span>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-2 mb-6">
-              PROFESJONALIŚCI <br /><span className="text-gradient">W BRANŻY OPON</span>
+              O WM TYRES <br /><span className="text-gradient">EKSPERCI OD OPON</span>
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                Od ponad 15 lat specjalizujemy się w obsłudze opon do maszyn budowlanych. 
-                Nasza wiedza i doświadczenie pozwalają nam realizować nawet najtrudniejsze zlecenia.
+                WM Tyres jest specjalistą w dziedzinie opon do ciężkich pojazdów, felg i usług 
+                związanych z oponami do maszyn budowlanych i sprzętu do robót ziemnych. Oferujemy 
+                wysokiej jakości produkty, szybką dostawę i profesjonalny montaż w całej Europie.
               </p>
               <p>
-                Współpracujemy z największymi firmami budowlanymi w regionie, zapewniając 
-                kompleksową obsługę ich floty maszynowej. Oferujemy serwis mobilny - dojeżdżamy 
-                bezpośrednio na plac budowy.
+                Nasze usługi obejmują bieżnikowanie, naprawy i wsparcie na miejscu — poparte 
+                elastycznymi umowami serwisowymi i niezawodną usługą Ride-On, która minimalizuje 
+                przestoje.
               </p>
               <p>
-                Stawiamy na jakość i terminowość. Każde zlecenie traktujemy indywidualnie, 
-                dobierając optymalne rozwiązania dla naszych klientów.
+                Wszyscy nasi pracownicy przeszli kompleksowe szkolenia i posiadają niezbędne 
+                certyfikaty.
               </p>
             </div>
 
