@@ -82,14 +82,15 @@ const Realizations = () => {
               className="group bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-500 shadow-card hover:-translate-y-2"
             >
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden bg-card">
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 will-change-transform"
-                  style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0) scale(1.001)' }}
+                  loading="lazy"
+                  className="block w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 transform-gpu will-change-transform"
+                  style={{ backfaceVisibility: "hidden" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent pointer-events-none" />
+                <div className="absolute -inset-px bg-gradient-to-t from-card to-transparent pointer-events-none" />
                 <span className="absolute top-4 right-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
                   {item.type}
                 </span>
