@@ -12,7 +12,7 @@ const Footer = () => {
               <img 
                 src={logo} 
                 alt="WM Tyres - Profesjonalna wymiana opon" 
-                className="h-10 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-muted-foreground max-w-md">
