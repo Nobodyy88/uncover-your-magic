@@ -34,16 +34,22 @@ const Hero = () => {
           </div>
 
           {/* Headline */}
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none mb-6 opacity-0 animate-fade-up animation-delay-100">
-            WYMIANA OPON
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight mb-6 opacity-0 animate-fade-up animation-delay-100">
+            Twój zaufany partner w zakresie
             <br />
-            <span className="text-gradient">MASZYN BUDOWLANYCH</span>
+            <span className="text-gradient">opon do maszyn budowlanych</span>
+            <br />
+            <span className="text-2xl sm:text-3xl md:text-4xl text-muted-foreground font-medium">
+              Sprzedaż, wymiana i montaż na miejscu
+            </span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up animation-delay-200">
-            Specjalizujemy się w profesjonalnej wymianie i naprawie opon do koparek, 
-            ładowarek, wózków widłowych i innych maszyn budowlanych.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 opacity-0 animate-fade-up animation-delay-200">
+            W WM Tyres specjalizujemy się w dostawie i montażu opon do ciężkich maszyn, takich jak koparki, 
+            ładowarki, wywrotki i wszelkiego rodzaju sprzęt budowlany. Niezależnie od tego, czy masz do czynienia 
+            z zużytymi bieżnikami, czy też chcesz wymienić opony na lepsze, dostarczymy odpowiednie opony 
+            i zamontujemy je w wybranym miejscu i czasie.
           </p>
 
           {/* CTAs */}
