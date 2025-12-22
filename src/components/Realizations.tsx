@@ -86,9 +86,10 @@ const Realizations = () => {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 will-change-transform"
+                  style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0) scale(1.001)' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent pointer-events-none" />
                 <span className="absolute top-4 right-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
                   {item.type}
                 </span>

@@ -18,11 +18,11 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <a href="#" className="flex items-center gap-2 bg-background/90 rounded-lg px-2 py-1">
             <img 
               src={logo} 
               alt="WM Tyres - Profesjonalna wymiana opon" 
-              className="h-10 w-auto"
+              className="h-9 w-auto"
             />
           </a>
 
