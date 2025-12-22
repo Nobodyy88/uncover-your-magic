@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin } from "lucide-react";
+import logo from "@/assets/logo-wmtyres.webp";
 
 const Footer = () => {
   return (
@@ -8,12 +9,11 @@ const Footer = () => {
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-display text-xl">OP</span>
-              </div>
-              <span className="font-display text-2xl text-foreground">
-                OPONY<span className="text-primary">PRO</span>
-              </span>
+              <img 
+                src={logo} 
+                alt="WM Tyres - Profesjonalna wymiana opon" 
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-muted-foreground max-w-md">
               Profesjonalna wymiana i naprawa opon do maszyn budowlanych. 
@@ -48,9 +48,9 @@ const Footer = () => {
                 <Phone className="w-4 h-4" />
                 +48 123 456 789
               </a>
-              <a href="mailto:kontakt@oponypro.pl" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:kontakt@wmtyres.pl" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Mail className="w-4 h-4" />
-                kontakt@oponypro.pl
+                kontakt@wmtyres.pl
               </a>
               <div className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -62,7 +62,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="pt-8 border-t border-border text-center text-muted-foreground text-sm">
-          <p>© {new Date().getFullYear()} OponyPro. Wszelkie prawa zastrzeżone.</p>
+          <p>© {new Date().getFullYear()} WM Tyres. Wszelkie prawa zastrzeżone.</p>
         </div>
       </div>
     </footer>
