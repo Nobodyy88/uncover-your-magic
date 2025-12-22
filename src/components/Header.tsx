@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo-wmtyres.webp";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,12 +19,11 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-display text-xl">OP</span>
-            </div>
-            <span className="font-display text-2xl text-foreground hidden sm:block">
-              OPONY<span className="text-primary">PRO</span>
-            </span>
+            <img 
+              src={logo} 
+              alt="WM Tyres - Profesjonalna wymiana opon" 
+              className="h-10 w-auto"
+            />
           </a>
 
           {/* Desktop Navigation */}
