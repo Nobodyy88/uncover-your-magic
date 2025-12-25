@@ -12,8 +12,8 @@ export const pl = {
   },
   hero: {
     badge: "Profesjonalna wymiana opon",
-    headline1: "Twój zaufany partner w zakresie",
-    headline2: "opon do maszyn budowlanych",
+    headline1: "Wprawiamy Twój biznes w ruch.",
+    headline2: "Solidne opony, pewny plac budowy.",
     headline3: "Sprzedaż, wymiana i montaż na miejscu",
     ctaPrimary: "Umów bezpłatną wycenę",
     ctaSecondary: "Zobacz nasze realizacje",

@@ -13,8 +13,8 @@ export const en: Translations = {
   },
   hero: {
     badge: "Professional tire service",
-    headline1: "Your trusted partner for",
-    headline2: "construction machinery tires",
+    headline1: "We put your business in motion.",
+    headline2: "Solid tires, reliable construction site.",
     headline3: "Sales, replacement and on-site installation",
     ctaPrimary: "Get a free quote",
     ctaSecondary: "See our projects",
