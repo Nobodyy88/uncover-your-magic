@@ -14,7 +14,8 @@ export const en: Translations = {
   hero: {
     badge: "Professional tire service",
     headline1: "We put your business in motion.",
-    headline2: "Solid tires, reliable construction site.",
+    headline2: "Solid tires.",
+    headline2b: "Reliable construction site.",
     headline3: "Sales, replacement and on-site installation",
     ctaPrimary: "Get a free quote",
     ctaSecondary: "See our projects",
@@ -140,7 +141,7 @@ export const en: Translations = {
     info: {
       title: "Contact details",
       phone: { label: "Phone", value: "+48 123 456 789" },
-      email: { label: "Email", value: "kontakt@oponypro.pl" },
+      email: { label: "Email", value: "kontakt@wmtyres.pl" },
       address: { label: "Address", value: "ul. Przemysłowa 15, Warsaw" },
       hours: { label: "Hours", value: "Mon-Fri: 7:00-18:00, Sat: 8:00-14:00" },
     },
@@ -182,7 +183,7 @@ export const en: Translations = {
     copyright: "WM Tyres. All rights reserved.",
   },
   meta: {
-    title: "TiresPro - Professional construction machinery tire service",
+    title: "WM Tyres - Professional construction machinery tire service",
     description:
       "We specialize in replacing and repairing tires for excavators, loaders, forklifts. 24/7 mobile service, 15 years of experience. Book a free quote!",
     keywords:

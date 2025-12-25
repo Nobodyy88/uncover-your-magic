@@ -13,7 +13,8 @@ export const pl = {
   hero: {
     badge: "Profesjonalna wymiana opon",
     headline1: "Wprawiamy Twój biznes w ruch.",
-    headline2: "Solidne opony, pewny plac budowy.",
+    headline2: "Solidne opony.",
+    headline2b: "Pewny plac budowy.",
     headline3: "Sprzedaż, wymiana i montaż na miejscu",
     ctaPrimary: "Umów bezpłatną wycenę",
     ctaSecondary: "Zobacz nasze realizacje",
@@ -139,7 +140,7 @@ export const pl = {
     info: {
       title: "Dane kontaktowe",
       phone: { label: "Telefon", value: "+48 123 456 789" },
-      email: { label: "Email", value: "kontakt@oponypro.pl" },
+      email: { label: "Email", value: "kontakt@wmtyres.pl" },
       address: { label: "Adres", value: "ul. Przemysłowa 15, Warszawa" },
       hours: { label: "Godziny", value: "Pon-Pt: 7:00-18:00, Sob: 8:00-14:00" },
     },
@@ -181,7 +182,7 @@ export const pl = {
     copyright: "WM Tyres. Wszelkie prawa zastrzeżone.",
   },
   meta: {
-    title: "OponyPro - Profesjonalna wymiana opon maszyn budowlanych",
+    title: "WM Tyres - Profesjonalna wymiana opon maszyn budowlanych",
     description:
       "Specjalizujemy się w wymianie i naprawie opon do koparek, ładowarek, wózków widłowych. Serwis mobilny 24/7, 15 lat doświadczenia. Umów bezpłatną wycenę!",
     keywords:

@@ -42,7 +42,7 @@ const ContactForm = () => {
 
   const contactInfo = [
     { icon: Phone, ...t.contact.info.phone, href: "tel:+48123456789" },
-    { icon: Mail, ...t.contact.info.email, href: "mailto:kontakt@oponypro.pl" },
+    { icon: Mail, ...t.contact.info.email, href: "mailto:kontakt@wmtyres.pl" },
     { icon: MapPin, ...t.contact.info.address, href: "#" },
     { icon: Clock, ...t.contact.info.hours, href: "#" },
   ];
