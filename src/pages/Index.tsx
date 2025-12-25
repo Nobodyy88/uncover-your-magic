@@ -1,24 +1,25 @@
 import { Helmet } from "react-helmet";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Realizations from "@/components/Realizations";
 import About from "@/components/About";
+import Partners from "@/components/Partners";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  const { t } = useLanguage();
+
   return (
     <>
       <Helmet>
-        <title>OponyPro - Profesjonalna wymiana opon maszyn budowlanych</title>
-        <meta 
-          name="description" 
-          content="Specjalizujemy się w wymianie i naprawie opon do koparek, ładowarek, wózków widłowych. Serwis mobilny 24/7, 15 lat doświadczenia. Umów bezpłatną wycenę!" 
-        />
-        <meta name="keywords" content="wymiana opon, maszyny budowlane, opony do koparek, opony do ładowarek, serwis opon, wulkanizacja" />
+        <title>{t.meta.title}</title>
+        <meta name="description" content={t.meta.description} />
+        <meta name="keywords" content={t.meta.keywords} />
       </Helmet>
-      
+
       <div className="min-h-screen bg-background">
         <Header />
         <main>
@@ -26,6 +27,7 @@ const Index = () => {
           <Services />
           <Realizations />
           <About />
+          <Partners />
           <ContactForm />
         </main>
         <Footer />

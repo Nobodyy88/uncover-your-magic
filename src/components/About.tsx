@@ -1,55 +1,48 @@
 import { Users, Award, Truck, Clock } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const icons = [Users, Award, Truck, Clock];
 
 const About = () => {
-  const stats = [
-    { icon: Users, value: "500+", label: "Zadowolonych klientów" },
-    { icon: Award, value: "15", label: "Lat doświadczenia" },
-    { icon: Truck, value: "2000+", label: "Wykonanych usług" },
-    { icon: Clock, value: "24/7", label: "Dostępność serwisu" },
-  ];
+  const { t } = useLanguage();
 
   return (
     <section id="o-nas" className="py-24 bg-gradient-dark relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_hsl(25,95%,53%,0.1),transparent_60%)]" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
           <div>
-            <span className="text-primary font-semibold uppercase tracking-wider text-sm">O nas</span>
+            <span className="text-primary font-semibold uppercase tracking-wider text-sm">
+              {t.about.label}
+            </span>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-2 mb-6">
-              O WM TYRES <br /><span className="text-gradient">EKSPERCI OD OPON</span>
+              {t.about.title} <br />
+              <span className="text-gradient">{t.about.titleHighlight}</span>
             </h2>
             <div className="space-y-4 text-muted-foreground">
-              <p>
-                WM Tyres jest specjalistą w dziedzinie opon do ciężkich pojazdów, felg i usług 
-                związanych z oponami do maszyn budowlanych i sprzętu do robót ziemnych. Oferujemy 
-                wysokiej jakości produkty, szybką dostawę i profesjonalny montaż w całej Europie.
-              </p>
-              <p>
-                Nasze usługi obejmują bieżnikowanie, naprawy i wsparcie na miejscu — poparte 
-                elastycznymi umowami serwisowymi i niezawodną usługą Ride-On, która minimalizuje 
-                przestoje.
-              </p>
-              <p>
-                Wszyscy nasi pracownicy przeszli kompleksowe szkolenia i posiadają niezbędne 
-                certyfikaty.
-              </p>
+              {t.about.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-6 mt-10">
-              {stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <stat.icon className="w-6 h-6 text-primary" />
+              {t.about.stats.map((stat, index) => {
+                const Icon = icons[index];
+                return (
+                  <div key={index} className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <div className="font-display text-3xl text-foreground">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-display text-3xl text-foreground">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -60,14 +53,14 @@ const About = () => {
                 <div className="rounded-2xl overflow-hidden shadow-card">
                   <img
                     src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop"
-                    alt="Maszyna budowlana"
+                    alt={t.about.images.alt1}
                     className="w-full h-48 object-cover"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden shadow-card">
                   <img
                     src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=400&h=400&fit=crop"
-                    alt="Koparka"
+                    alt={t.about.images.alt2}
                     className="w-full h-56 object-cover"
                   />
                 </div>
@@ -76,14 +69,14 @@ const About = () => {
                 <div className="rounded-2xl overflow-hidden shadow-card">
                   <img
                     src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop"
-                    alt="Plac budowy"
+                    alt={t.about.images.alt3}
                     className="w-full h-56 object-cover"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden shadow-card">
                   <img
                     src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=300&fit=crop"
-                    alt="Maszyny budowlane"
+                    alt={t.about.images.alt4}
                     className="w-full h-48 object-cover"
                   />
                 </div>

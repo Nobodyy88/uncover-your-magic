@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const icons = [Phone, Mail, MapPin, Clock];
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -28,8 +32,8 @@ const ContactForm = () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
-      title: "Wiadomość wysłana!",
-      description: "Skontaktujemy się z Tobą najszybciej jak to możliwe.",
+      title: t.contact.toast.title,
+      description: t.contact.toast.description,
     });
 
     setFormData({ name: "", phone: "", email: "", machine: "", message: "" });
@@ -37,10 +41,10 @@ const ContactForm = () => {
   };
 
   const contactInfo = [
-    { icon: Phone, label: "Telefon", value: "+48 123 456 789", href: "tel:+48123456789" },
-    { icon: Mail, label: "Email", value: "kontakt@oponypro.pl", href: "mailto:kontakt@oponypro.pl" },
-    { icon: MapPin, label: "Adres", value: "ul. Przemysłowa 15, Warszawa", href: "#" },
-    { icon: Clock, label: "Godziny", value: "Pon-Pt: 7:00-18:00, Sob: 8:00-14:00", href: "#" },
+    { icon: Phone, ...t.contact.info.phone, href: "tel:+48123456789" },
+    { icon: Mail, ...t.contact.info.email, href: "mailto:kontakt@oponypro.pl" },
+    { icon: MapPin, ...t.contact.info.address, href: "#" },
+    { icon: Clock, ...t.contact.info.hours, href: "#" },
   ];
 
   return (
@@ -48,13 +52,14 @@ const ContactForm = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="text-primary font-semibold uppercase tracking-wider text-sm">Kontakt</span>
+          <span className="text-primary font-semibold uppercase tracking-wider text-sm">
+            {t.contact.label}
+          </span>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-2 mb-4">
-            UMÓW <span className="text-gradient">WIZYTĘ</span>
+            {t.contact.title} <span className="text-gradient">{t.contact.titleHighlight}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Potrzebujesz wymiany opon? Skontaktuj się z nami - przygotujemy indywidualną wycenę 
-            i umówimy dogodny termin.
+            {t.contact.description}
           </p>
         </div>
 
@@ -62,14 +67,10 @@ const ContactForm = () => {
           {/* Contact Info */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-card rounded-2xl p-8 border border-border shadow-card">
-              <h3 className="font-display text-2xl mb-6">Dane kontaktowe</h3>
+              <h3 className="font-display text-2xl mb-6">{t.contact.info.title}</h3>
               <div className="space-y-6">
                 {contactInfo.map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.href}
-                    className="flex items-start gap-4 group"
-                  >
+                  <a key={index} href={item.href} className="flex items-start gap-4 group">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                       <item.icon className="w-5 h-5 text-primary" />
                     </div>
@@ -87,15 +88,18 @@ const ContactForm = () => {
             {/* Quick CTA */}
             <div className="bg-gradient-primary rounded-2xl p-8 text-center">
               <h3 className="font-display text-2xl text-primary-foreground mb-2">
-                Pilna sprawa?
+                {t.contact.urgent.title}
               </h3>
-              <p className="text-primary-foreground/80 mb-4">
-                Zadzwoń teraz - działamy 24/7
-              </p>
-              <Button variant="outline" size="lg" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-none" asChild>
+              <p className="text-primary-foreground/80 mb-4">{t.contact.urgent.description}</p>
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-none"
+                asChild
+              >
                 <a href="tel:+48123456789">
                   <Phone className="w-4 h-4 mr-2" />
-                  +48 123 456 789
+                  {t.contact.info.phone.value}
                 </a>
               </Button>
             </div>
@@ -104,26 +108,26 @@ const ContactForm = () => {
           {/* Form */}
           <div className="lg:col-span-3">
             <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 border border-border shadow-card">
-              <h3 className="font-display text-2xl mb-6">Formularz kontaktowy</h3>
-              
+              <h3 className="font-display text-2xl mb-6">{t.contact.form.title}</h3>
+
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                    Imię i nazwisko *
+                    {t.contact.form.name.label}
                   </label>
                   <Input
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Jan Kowalski"
+                    placeholder={t.contact.form.name.placeholder}
                     required
                     className="bg-secondary border-border"
                   />
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-                    Telefon *
+                    {t.contact.form.phone.label}
                   </label>
                   <Input
                     id="phone"
@@ -131,7 +135,7 @@ const ContactForm = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+48 123 456 789"
+                    placeholder={t.contact.form.phone.placeholder}
                     required
                     className="bg-secondary border-border"
                   />
@@ -141,7 +145,7 @@ const ContactForm = () => {
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                    Email
+                    {t.contact.form.email.label}
                   </label>
                   <Input
                     id="email"
@@ -149,20 +153,20 @@ const ContactForm = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="jan@firma.pl"
+                    placeholder={t.contact.form.email.placeholder}
                     className="bg-secondary border-border"
                   />
                 </div>
                 <div>
                   <label htmlFor="machine" className="block text-sm font-medium text-foreground mb-2">
-                    Typ maszyny
+                    {t.contact.form.machine.label}
                   </label>
                   <Input
                     id="machine"
                     name="machine"
                     value={formData.machine}
                     onChange={handleChange}
-                    placeholder="np. Koparka CAT 320"
+                    placeholder={t.contact.form.machine.placeholder}
                     className="bg-secondary border-border"
                   />
                 </div>
@@ -170,14 +174,14 @@ const ContactForm = () => {
 
               <div className="mb-6">
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                  Wiadomość *
+                  {t.contact.form.message.label}
                 </label>
                 <Textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Opisz czego potrzebujesz - rodzaj usługi, preferowany termin, lokalizacja..."
+                  placeholder={t.contact.form.message.placeholder}
                   rows={5}
                   required
                   className="bg-secondary border-border resize-none"
@@ -186,10 +190,10 @@ const ContactForm = () => {
 
               <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (
-                  "Wysyłanie..."
+                  t.contact.form.submitting
                 ) : (
                   <>
-                    Wyślij wiadomość
+                    {t.contact.form.submit}
                     <Send className="w-5 h-5" />
                   </>
                 )}
