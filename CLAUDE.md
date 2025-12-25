@@ -1,45 +1,62 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Ten plik zawiera wskazówki dla Claude Code (claude.ai/code) podczas pracy z kodem w tym repozytorium.
 
-## Build Commands
+## Zasady komunikacji
+
+- Odpowiadaj zawsze w języku polskim
+
+## Środowisko pracy
+
+- Zmiany wprowadzane są na serwerze lokalnym z podpiętą domeną
+- Użytkownik ma stały podgląd strony w przeglądarce
+- Nie trzeba uruchamiać `npm run dev` - wystarczy `npm run build` po zmianach
+
+## Wielojęzyczność
+
+- Wszystkie zmiany tekstów wprowadzaj zarówno do wersji polskiej (`src/locales/pl.ts`) jak i angielskiej (`src/locales/en.ts`)
+
+## Polecenia budowania
 
 ```bash
-npm run dev          # Start dev server (port 8080)
-npm run build        # Production build
-npm run build:dev    # Development build
-npm run lint         # ESLint check
-npm run preview      # Preview production build
+npm run dev          # Uruchom serwer deweloperski (port 8080)
+npm run build        # Build produkcyjny
+npm run build:dev    # Build deweloperski
+npm run lint         # Sprawdzenie ESLint
+npm run preview      # Podgląd buildu produkcyjnego
 ```
 
-## Architecture
+## Architektura
 
-This is a React + TypeScript landing page for "WM Tyres" (tire service company for construction machinery). Built with Vite, uses shadcn/ui components and Tailwind CSS.
+To jest strona landing page w React + TypeScript dla "WM Tyres" (serwis opon do maszyn budowlanych). Zbudowana z Vite, używa komponentów shadcn/ui i Tailwind CSS.
 
-### Path Aliases
-- `@/` maps to `src/` (configured in vite.config.ts and tsconfig.json)
+### Aliasy ścieżek
+- `@/` mapuje do `src/` (skonfigurowane w vite.config.ts i tsconfig.json)
 
-### Project Structure
-- `src/pages/` - Route pages (Index, NotFound)
-- `src/components/` - Custom components (Header, Hero, Services, Realizations, About, ContactForm, Footer)
-- `src/components/ui/` - shadcn/ui primitives
-- `src/hooks/` - Custom hooks (use-toast, use-mobile)
-- `src/lib/utils.ts` - `cn()` utility for merging Tailwind classes
-- `src/integrations/supabase/` - Supabase client and auto-generated types
+### Struktura projektu
+- `src/pages/` - Strony routingu (Index, NotFound)
+- `src/components/` - Własne komponenty (Header, Hero, Services, Realizations, About, ContactForm, Footer, LanguageSwitcher, Partners)
+- `src/components/ui/` - Komponenty bazowe shadcn/ui
+- `src/hooks/` - Własne hooki (use-toast, use-mobile)
+- `src/lib/utils.ts` - Narzędzie `cn()` do łączenia klas Tailwind
+- `src/integrations/supabase/` - Klient Supabase i automatycznie generowane typy
+- `src/contexts/` - Konteksty React (LanguageContext dla i18n)
+- `src/locales/` - Pliki tłumaczeń (pl.ts, en.ts)
 
-### Key Patterns
-- Uses React Router for routing (add routes in `App.tsx` above the catch-all `*` route)
-- Supabase client: `import { supabase } from "@/integrations/supabase/client"`
-- Toast notifications via `sonner` and custom `useToast` hook
-- TanStack Query for server state management
-- Form handling with react-hook-form + zod validation
+### Kluczowe wzorce
+- React Router do routingu (dodawaj trasy w `App.tsx` powyżej catch-all `*`)
+- Klient Supabase: `import { supabase } from "@/integrations/supabase/client"`
+- Powiadomienia toast przez `sonner` i własny hook `useToast`
+- TanStack Query do zarządzania stanem serwera
+- Obsługa formularzy: react-hook-form + walidacja zod
+- Wielojęzyczność: `useLanguage()` hook z LanguageContext
 
-### Styling
-- Tailwind CSS with CSS variables for theming (defined in `src/index.css`)
-- Custom fonts: "Bebas Neue" (display), "Inter" (sans)
-- shadcn/ui style: "default" with slate base color
+### Stylowanie
+- Tailwind CSS z zmiennymi CSS do motywów (zdefiniowane w `src/index.css`)
+- Własne fonty: "Bebas Neue" (display), "Inter" (sans)
+- Styl shadcn/ui: "default" z bazowym kolorem slate
 
-### Environment Variables
-Required in `.env`:
+### Zmienne środowiskowe
+Wymagane w `.env`:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
