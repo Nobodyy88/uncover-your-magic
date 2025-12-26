@@ -1,10 +1,24 @@
 export const pl = {
   header: {
     nav: {
+      products: "Produkty",
+      productItems: {
+        tires: "Opony",
+        rims: "Felgi",
+        regeneration: "Regeneracja",
+        rideOn: "Ride On",
+      },
+      service: "Serwis",
+      serviceItems: {
+        repairs: "Naprawy",
+        serviceContract: "Umowa serwisowa",
+        mounting: "Montaż",
+      },
       services: "Usługi",
       realizations: "Realizacje",
       about: "O nas",
       partners: "Partnerzy",
+      partnerNetwork: "Sieć partnerów",
       contact: "Kontakt",
     },
     cta: "Umów wizytę",
@@ -58,9 +72,9 @@ export const pl = {
     title: "O WM TYRES",
     titleHighlight: "EKSPERCI OD OPON",
     paragraphs: [
-      "Specjalizujemy się w dostawie i montażu opon do ciężkich maszyn, takich jak koparki, ładowarki, wywrotki i wszelkiego rodzaju sprzęt budowlany. Niezależnie od tego, czy masz do czynienia z zużytymi bieżnikami, czy też chcesz wymienić opony na lepsze — dostarczymy odpowiednie opony i zamontujemy je w wybranym przez Ciebie miejscu i czasie.",
-      "Oferujemy wysokiej jakości produkty, szybką dostawę i profesjonalny montaż. Nasze usługi obejmują bieżnikowanie, naprawy i wsparcie na miejscu — poparte elastycznymi umowami serwisowymi, które minimalizują przestoje Twoich maszyn.",
-      "Wszyscy nasi pracownicy przeszli kompleksowe szkolenia i posiadają niezbędne certyfikaty.",
+      "WM Tyres to kompleksowy partner w zakresie rozwiązań oponiarskich dla branży budowlanej w całej Europie. Oferujemy szeroki wybór opon i felg do koparek, ładowarek, wywrotek oraz wszelkiego rodzaju maszyn budowlanych i do robót ziemnych.",
+      "Nasze usługi obejmują profesjonalny montaż, bieżnikowanie oraz naprawy — realizowane na miejscu u klienta lub w naszym warsztacie. Dzięki elastycznym umowom serwisowym i wydajnej usłudze Ride-On zapewniamy minimalne przestoje i maksymalną wydajność Twojej floty.",
+      "Niezależnie od tego, czy wymieniasz zużyte opony, czy potrzebujesz pilnej naprawy — WM Tyres gwarantuje szybkość, niezawodność i wsparcie na najwyższym poziomie. Wszyscy nasi pracownicy przeszli kompleksowe szkolenia i posiadają niezbędne certyfikaty.",
     ],
     stats: [
       { value: "500+", label: "Zadowolonych klientów" },
@@ -74,6 +88,27 @@ export const pl = {
       alt3: "Plac budowy",
       alt4: "Maszyny budowlane",
     },
+  },
+  team: {
+    title: "NASZ",
+    titleHighlight: "ZESPÓŁ",
+    members: [
+      {
+        name: "Erik Willering",
+        role: "Dyrektor generalny",
+        description: "Erik Willering jest dyrektorem generalnym WM Tyres, znanym ze swojego praktycznego podejścia do zarządzania, wiedzy branżowej i orientacji na klienta. Promuje innowacyjność i doskonałość usług w całej europejskiej sieci rozwiązań oponiarskich.",
+      },
+      {
+        name: "Paweł Pastor",
+        role: "Kierownik ds. sprzedaży",
+        description: "Paweł Pastor jest kierownikiem ds. sprzedaży w WM Tyres, gdzie zajmuje się budowaniem silnych relacji z klientami i dostarczaniem dostosowanych do ich potrzeb rozwiązań w zakresie opon. Dzięki dogłębnej znajomości rynku zapewnia satysfakcję klientów w całej naszej europejskiej sieci.",
+      },
+      {
+        name: "Ola Willering - Pastor",
+        role: "Księgowość",
+        description: "Ola Pastor jest księgową w WM Tyres, odpowiedzialną za dokładne zarządzanie finansami i fakturami. Dzięki skrupulatności i silnym umiejętnościom organizacyjnym wspiera sprawne funkcjonowanie firmy.",
+      },
+    ],
   },
   realizations: {
     label: "Portfolio",
@@ -150,12 +185,12 @@ export const pl = {
     },
     form: {
       title: "Formularz kontaktowy",
-      name: { label: "Imię i nazwisko *", placeholder: "Jan Kowalski" },
-      phone: { label: "Telefon *", placeholder: "+48 123 456 789" },
+      name: { label: "Imię i nazwisko", placeholder: "Jan Kowalski" },
+      phone: { label: "Telefon", placeholder: "+48 123 456 789" },
       email: { label: "Email", placeholder: "jan@firma.pl" },
       machine: { label: "Typ maszyny", placeholder: "np. Koparka CAT 320" },
       message: {
-        label: "Wiadomość *",
+        label: "Wiadomość",
         placeholder:
           "Opisz czego potrzebujesz - rodzaj usługi, preferowany termin, lokalizacja...",
       },
@@ -165,7 +200,14 @@ export const pl = {
     toast: {
       title: "Wiadomość wysłana!",
       description: "Skontaktujemy się z Tobą najszybciej jak to możliwe.",
+      errorTitle: "Błąd wysyłania",
+      errorDescription: "Nie udało się wysłać wiadomości. Spróbuj ponownie później lub zadzwoń do nas.",
     },
+  },
+  brands: {
+    label: "Zaufane marki",
+    title: "MARKI, KTÓRE",
+    titleHighlight: "SPRZEDAJEMY",
   },
   partners: {
     label: "Zasięg",
@@ -174,12 +216,69 @@ export const pl = {
     description:
       "Dzięki rozbudowanej sieci dealerów w całej Europie firma WM Tyres zapewnia szybką dostawę, profesjonalną obsługę i wsparcie na miejscu. Nasze połączone zespoły gwarantują stałą jakość, niezawodne naprawy i profesjonalny montaż — niezależnie od tego, gdzie pracują Twoje maszyny. Dbamy o sprawne i bezpieczne funkcjonowanie Twojej floty.",
   },
+  partnerNetwork: {
+    title: "SIEĆ PARTNERÓW",
+    titleHighlight: "WM TYRES NETWORK",
+    featuresTitle: "NASZE",
+    featuresTitleHighlight: "ATUTY",
+    headline: "Wiodąca w Europie sieć opon przemysłowych — dostępna 24 godziny na dobę, 7 dni w tygodniu",
+    description:
+      "WM Tyres Network to europejski lider w sprzedaży opon i kompleksowych usługach serwisowych dla pojazdów użytkowych. Zapewniamy wsparcie 24/7 przy każdym problemie z oponami, pomagając Twoim maszynom wrócić do pracy najszybciej jak to możliwe. Wspólnie z naszymi partnerami dostarczamy usługi na najwyższym poziomie, dzięki czemu jesteśmy zaufanymi specjalistami w branży oponiarskiej w całej Europie. Nasza sieć partnerów serwisowych stale się rozwija, obejmując firmy leasingowe, przemysł, transport, rolnictwo oraz roboty ziemne — sektory, w których jesteśmy niekwestionowanym liderem.",
+    features: {
+      materials: {
+        title: "Odpowiednie materiały, odpowiednia lokalizacja",
+        description:
+          "WM Tyres zapewnia dostawę właściwych materiałów we właściwe miejsce. Oferujemy światowej klasy uszczelniacz do opon Ride-On oraz Ride-On TWC®, gwarantujące doskonałą ochronę przed korozją felg i skutkami niedopompowania opon.",
+      },
+      assortment: {
+        title: "Szeroki asortyment — od 25 do 57 cali",
+        description:
+          "Dysponujemy bogatą ofertą nowych i używanych opon we wszystkich rozmiarach. Jesteśmy jedynym dostawcą oferującym kompleksowe usługi montażu opon o rozmiarach od 25 do 57 cali.",
+      },
+      downtime: {
+        title: "Minimalizacja przestojów",
+        description:
+          "WM Tyres rozwiązuje problemy tak szybko, jak to możliwe, redukując kosztowne przestoje. W branży budowlanej każda godzina postoju to realna strata — dlatego działamy bez zbędnej zwłoki.",
+      },
+      service: {
+        title: "Serwis przez całą dobę",
+        description:
+          "WM Tyres to jedyny dostawca oferujący prawdziwie całodobową obsługę: montaż i demontaż opon na miejscu, odbiór uszkodzonych opon oraz dostarczenie nowej lub naprawionej opony w ciągu 48 godzin.",
+      },
+    },
+    cta: {
+      title: "DOŁĄCZ DO",
+      titleHighlight: "NASZEJ SIECI",
+      description: "Skontaktuj się z nami, aby dowiedzieć się więcej o współpracy partnerskiej i możliwościach dołączenia do europejskiej sieci WM Tyres.",
+      button: "Skontaktuj się z nami",
+    },
+  },
   footer: {
     description:
       "Profesjonalna wymiana i naprawa opon do maszyn budowlanych. 15 lat doświadczenia, serwis mobilny 24/7.",
     quickLinks: "Szybkie linki",
     contactTitle: "Kontakt",
     copyright: "WM Tyres. Wszelkie prawa zastrzeżone.",
+  },
+  pages: {
+    tires: {
+      title: "OPONY",
+      subtitle: "Produkty WM Tyres",
+      features: {
+        pressure: {
+          title: "Zmniejszamy presję",
+          description: "WM Tyres zmniejsza presję, szybko i skutecznie rozwiązując problemy — ponieważ maszyny nie mogą sobie pozwolić na przestoje. Czas to pieniądz.",
+        },
+        service: {
+          title: "Całodobowa pomoc na miejscu",
+          description: "WM Tyres to jedyny dostawca oferujący prawdziwą całodobową pomoc. Zajmujemy się montażem i demontażem opon na miejscu, zabieramy uszkodzoną oponę i zwracamy naprawioną lub nową oponę w ciągu zaledwie dwóch dni.",
+        },
+        partnerships: {
+          title: "Silne partnerstwa w całej Europie",
+          description: "WM Tyres ściśle współpracuje z siecią doświadczonych partnerów w całej Europie, którzy podzielają nasze wartości i zaangażowanie w obsługę klienta. Dzięki tym silnym partnerstwom jesteśmy w stanie zapewnić szybkie i skuteczne rozwiązania — niezależnie od tego, gdzie się znajdujesz.",
+        },
+      },
+    },
   },
   meta: {
     title: "WM Tyres - Profesjonalna wymiana opon maszyn budowlanych",

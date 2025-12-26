@@ -1,10 +1,17 @@
 import { ArrowRight, Shield, Clock, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import logo from "@/assets/logo.webp";
+import logo from "@/assets/logo.png";
 
 const Hero = () => {
   const { t } = useLanguage();
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const features = [
     { icon: Shield, text: t.hero.features.quality },
@@ -53,14 +60,12 @@ const Hero = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-              <Button variant="hero" size="xl" asChild>
-                <a href="#kontakt">
-                  {t.hero.ctaPrimary}
-                  <ArrowRight className="w-5 h-5" />
-                </a>
+              <Button variant="hero" size="xl" onClick={() => scrollToSection("kontakt")}>
+                {t.hero.ctaPrimary}
+                <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button variant="heroOutline" size="xl" asChild>
-                <a href="#realizacje">{t.hero.ctaSecondary}</a>
+              <Button variant="heroOutline" size="xl" onClick={() => scrollToSection("realizacje")}>
+                {t.hero.ctaSecondary}
               </Button>
             </div>
 
@@ -79,24 +84,11 @@ const Hero = () => {
 
           {/* Right - Logo (hidden on mobile) */}
           <div className="hidden lg:flex justify-center lg:justify-end">
-            <div className="relative">
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-75" />
-              {/* Logo with fade effect */}
-              <div
-                className="relative"
-                style={{
-                  maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-                }}
-              >
-                <img
-                  src={logo}
-                  alt="WM Tyres"
-                  className="w-96 xl:w-[500px] h-auto"
-                />
-              </div>
-            </div>
+            <img
+              src={logo}
+              alt="WM Tyres"
+              className="w-96 xl:w-[500px] h-auto"
+            />
           </div>
         </div>
       </div>

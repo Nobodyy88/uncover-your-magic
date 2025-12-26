@@ -3,9 +3,24 @@ import type { Translations } from "./pl";
 export const en: Translations = {
   header: {
     nav: {
+      products: "Products",
+      productItems: {
+        tires: "Tires",
+        rims: "Rims",
+        regeneration: "Regeneration",
+        rideOn: "Ride On",
+      },
+      service: "Service",
+      serviceItems: {
+        repairs: "Repairs",
+        serviceContract: "Service Contract",
+        mounting: "Mounting",
+      },
       services: "Services",
       realizations: "Projects",
       about: "About",
+      partners: "Partners",
+      partnerNetwork: "Partner Network",
       contact: "Contact",
     },
     cta: "Book a visit",
@@ -59,9 +74,9 @@ export const en: Translations = {
     title: "ABOUT WM TYRES",
     titleHighlight: "TIRE EXPERTS",
     paragraphs: [
-      "We specialize in the delivery and installation of tires for heavy machinery such as excavators, loaders, dump trucks, and all types of construction equipment. Whether you're dealing with worn treads or want to upgrade your tires — we'll deliver the right tires and install them at your chosen location and time.",
-      "We offer high-quality products, fast delivery, and professional installation. Our services include retreading, repairs, and on-site support — backed by flexible service agreements that minimize downtime for your machines.",
-      "All our employees have undergone comprehensive training and hold the necessary certifications.",
+      "WM Tyres is a comprehensive partner for tire solutions in the construction industry across Europe. We offer a wide selection of tires and rims for excavators, loaders, dump trucks, and all types of construction and earthmoving machinery.",
+      "Our services include professional installation, retreading, and repairs — carried out on-site at the customer's location or in our workshop. With flexible service agreements and our efficient Ride-On service, we ensure minimal downtime and maximum efficiency for your fleet.",
+      "Whether you're replacing worn tires or need urgent repairs — WM Tyres guarantees speed, reliability, and top-level support. All our employees have undergone comprehensive training and hold the necessary certifications.",
     ],
     stats: [
       { value: "500+", label: "Satisfied customers" },
@@ -75,6 +90,27 @@ export const en: Translations = {
       alt3: "Construction site",
       alt4: "Construction machinery",
     },
+  },
+  team: {
+    title: "OUR",
+    titleHighlight: "TEAM",
+    members: [
+      {
+        name: "Erik Willering",
+        role: "CEO",
+        description: "Erik Willering is the CEO of WM Tyres, known for his hands-on management approach, industry expertise, and customer-first mindset. He drives innovation and service excellence across the European tire solutions network.",
+      },
+      {
+        name: "Paweł Pastor",
+        role: "Sales Manager",
+        description: "Paweł Pastor is the Sales Manager at WM Tyres, where he focuses on building strong client relationships and delivering tailored tire solutions. With deep market knowledge, he ensures customer satisfaction across our European network.",
+      },
+      {
+        name: "Ola Willering - Pastor",
+        role: "Accounting",
+        description: "Ola Pastor is the Accountant at WM Tyres, responsible for accurate financial management and invoicing. With meticulous attention to detail and strong organizational skills, she supports the smooth operation of the company.",
+      },
+    ],
   },
   realizations: {
     label: "Portfolio",
@@ -151,12 +187,12 @@ export const en: Translations = {
     },
     form: {
       title: "Contact form",
-      name: { label: "Full name *", placeholder: "John Smith" },
-      phone: { label: "Phone *", placeholder: "+48 123 456 789" },
+      name: { label: "Full name", placeholder: "John Smith" },
+      phone: { label: "Phone", placeholder: "+48 123 456 789" },
       email: { label: "Email", placeholder: "john@company.com" },
       machine: { label: "Machine type", placeholder: "e.g. CAT 320 Excavator" },
       message: {
-        label: "Message *",
+        label: "Message",
         placeholder:
           "Describe what you need - type of service, preferred date, location...",
       },
@@ -166,7 +202,14 @@ export const en: Translations = {
     toast: {
       title: "Message sent!",
       description: "We will contact you as soon as possible.",
+      errorTitle: "Sending failed",
+      errorDescription: "Failed to send message. Please try again later or call us.",
     },
+  },
+  brands: {
+    label: "Trusted brands",
+    title: "BRANDS WE",
+    titleHighlight: "SELL",
   },
   partners: {
     label: "Coverage",
@@ -175,12 +218,69 @@ export const en: Translations = {
     description:
       "With an extensive dealer network across Europe, WM Tyres ensures fast delivery, professional service, and on-site support. Our connected teams guarantee consistent quality, reliable repairs, and professional installation — no matter where your machines operate. We keep your fleet running smoothly and safely.",
   },
+  partnerNetwork: {
+    title: "PARTNER NETWORK",
+    titleHighlight: "WM TYRES NETWORK",
+    featuresTitle: "OUR",
+    featuresTitleHighlight: "STRENGTHS",
+    headline: "Europe's leading industrial tire network — available 24 hours a day, 7 days a week",
+    description:
+      "WM Tyres Network is Europe's leading provider of tire sales and comprehensive service solutions for commercial vehicles. We provide 24/7 support for any tire issue, helping your machines get back to work as quickly as possible. Together with our partners, we deliver top-tier services, making us trusted tire specialists across Europe. Our partner service network continues to grow, covering leasing companies, industry, transportation, agriculture, and earthmoving — sectors where we are the undisputed leader.",
+    features: {
+      materials: {
+        title: "Right materials, right location",
+        description:
+          "WM Tyres ensures delivery of the right materials to the right place. We offer world-class Ride-On tire sealant and Ride-On TWC®, providing excellent protection against rim corrosion and the effects of underinflation.",
+      },
+      assortment: {
+        title: "Wide range — from 25 to 57 inches",
+        description:
+          "We offer an extensive selection of new and used tires in all sizes. We are the only supplier providing comprehensive tire installation services for sizes from 25 to 57 inches.",
+      },
+      downtime: {
+        title: "Minimizing downtime",
+        description:
+          "WM Tyres resolves issues as quickly as possible, reducing costly downtime. In the construction industry, every hour of standstill means real losses — that's why we act without delay.",
+      },
+      service: {
+        title: "Round-the-clock service",
+        description:
+          "WM Tyres is the only supplier offering truly 24/7 service: on-site tire mounting and dismounting, pickup of damaged tires, and delivery of new or repaired tires within 48 hours.",
+      },
+    },
+    cta: {
+      title: "JOIN OUR",
+      titleHighlight: "NETWORK",
+      description: "Contact us to learn more about partnership opportunities and how to join the European WM Tyres network.",
+      button: "Contact us",
+    },
+  },
   footer: {
     description:
       "Professional replacement and repair of tires for construction machinery. 15 years of experience, 24/7 mobile service.",
     quickLinks: "Quick links",
     contactTitle: "Contact",
     copyright: "WM Tyres. All rights reserved.",
+  },
+  pages: {
+    tires: {
+      title: "TIRES",
+      subtitle: "WM Tyres Products",
+      features: {
+        pressure: {
+          title: "We reduce pressure",
+          description: "WM Tyres reduces pressure by quickly and effectively solving problems — because machines cannot afford downtime. Time is money.",
+        },
+        service: {
+          title: "24/7 on-site assistance",
+          description: "WM Tyres is the only supplier offering true 24/7 assistance. We handle tire mounting and dismounting on-site, pick up damaged tires, and return repaired or new tires within just two days.",
+        },
+        partnerships: {
+          title: "Strong partnerships across Europe",
+          description: "WM Tyres works closely with a network of experienced partners across Europe who share our values and commitment to customer service. Thanks to these strong partnerships, we are able to provide fast and effective solutions — no matter where you are.",
+        },
+      },
+    },
   },
   meta: {
     title: "WM Tyres - Professional construction machinery tire service",

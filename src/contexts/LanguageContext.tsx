@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { pl, Translations } from "@/locales/pl";
 import { en } from "@/locales/en";
+import { de } from "@/locales/de";
 
-type Language = "pl" | "en";
+type Language = "pl" | "en" | "de";
 
 interface LanguageContextType {
   language: Language;
@@ -10,7 +11,7 @@ interface LanguageContextType {
   t: Translations;
 }
 
-const translations: Record<Language, Translations> = { pl, en };
+const translations: Record<Language, Translations> = { pl, en, de };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -20,7 +21,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "pl" || stored === "en") return stored;
+      if (stored === "pl" || stored === "en" || stored === "de") return stored;
     }
     return "pl";
   });

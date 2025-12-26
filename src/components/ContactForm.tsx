@@ -6,11 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const icons = [Phone, Mail, MapPin, Clock];
+// URL webhooka n8n - ustaw w pliku .env jako VITE_N8N_WEBHOOK_URL
+const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "";
 
 const ContactForm = () => {
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -28,16 +29,52 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Symulacja wysyłki - w przyszłości można połączyć z backendem
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Sprawdź czy webhook URL jest skonfigurowany
+      if (!N8N_WEBHOOK_URL) {
+        console.error("N8N_WEBHOOK_URL nie jest skonfigurowany");
+        throw new Error("Webhook URL not configured");
+      }
 
-    toast({
-      title: t.contact.toast.title,
-      description: t.contact.toast.description,
-    });
+      // Wyślij dane do webhooka n8n
+      const response = await fetch(N8N_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          language,
+          timestamp: new Date().toISOString(),
+          source: "wmtyres-website",
+        }),
+      });
 
-    setFormData({ name: "", phone: "", email: "", machine: "", message: "" });
-    setIsSubmitting(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Sukces
+      toast({
+        title: t.contact.toast.title,
+        description: t.contact.toast.description,
+      });
+
+      // Wyczyść formularz
+      setFormData({ name: "", phone: "", email: "", machine: "", message: "" });
+
+    } catch (error) {
+      console.error("Błąd wysyłania formularza:", error);
+
+      // Pokaż błąd użytkownikowi
+      toast({
+        title: t.contact.toast.errorTitle || "Błąd",
+        description: t.contact.toast.errorDescription || "Nie udało się wysłać wiadomości. Spróbuj ponownie później.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -113,7 +150,7 @@ const ContactForm = () => {
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                    {t.contact.form.name.label}
+                    {t.contact.form.name.label} <span className="text-primary">*</span>
                   </label>
                   <Input
                     id="name"
@@ -127,7 +164,7 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-                    {t.contact.form.phone.label}
+                    {t.contact.form.phone.label} <span className="text-primary">*</span>
                   </label>
                   <Input
                     id="phone"
@@ -145,7 +182,7 @@ const ContactForm = () => {
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                    {t.contact.form.email.label}
+                    {t.contact.form.email.label} <span className="text-primary">*</span>
                   </label>
                   <Input
                     id="email"
@@ -154,6 +191,7 @@ const ContactForm = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder={t.contact.form.email.placeholder}
+                    required
                     className="bg-secondary border-border"
                   />
                 </div>
@@ -174,7 +212,7 @@ const ContactForm = () => {
 
               <div className="mb-6">
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                  {t.contact.form.message.label}
+                  {t.contact.form.message.label} <span className="text-primary">*</span>
                 </label>
                 <Textarea
                   id="message"

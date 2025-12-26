@@ -34,7 +34,7 @@ const Realizations = () => {
           {t.realizations.items.map((item, index) => (
             <article
               key={index}
-              className="group bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-500 shadow-card hover:-translate-y-2"
+              className="group bg-card rounded-2xl overflow-hidden border border-border hover:border-primary transition-all duration-300 shadow-card hover:shadow-[0_0_30px_hsl(25_95%_53%_/_0.2)]"
             >
               {/* Image */}
               <div className="relative h-48 overflow-hidden bg-card">
@@ -42,10 +42,9 @@ const Realizations = () => {
                   src={images[index]}
                   alt={item.title}
                   loading="lazy"
-                  className="block w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 transform-gpu will-change-transform"
-                  style={{ backfaceVisibility: "hidden" }}
+                  className="block w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
                 />
-                <div className="absolute -inset-px bg-gradient-to-t from-card to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent pointer-events-none" />
                 <span className="absolute top-4 right-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
                   {item.type}
                 </span>

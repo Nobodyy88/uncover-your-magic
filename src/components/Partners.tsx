@@ -12,24 +12,11 @@ const Partners = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left - EU Flag */}
           <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-            <div className="relative">
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-90" />
-              {/* Flag with fade effect */}
-              <div
-                className="relative"
-                style={{
-                  maskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 100%)",
-                }}
-              >
-                <img
-                  src={euFlag}
-                  alt="European Union"
-                  className="w-64 sm:w-80 lg:w-96 h-auto rounded-lg"
-                />
-              </div>
-            </div>
+            <img
+              src={euFlag}
+              alt="European Union"
+              className="w-64 sm:w-80 lg:w-96 h-auto rounded-lg"
+            />
           </div>
 
           {/* Right - Content */}

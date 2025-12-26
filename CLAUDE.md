@@ -11,10 +11,15 @@ Ten plik zawiera wskazówki dla Claude Code (claude.ai/code) podczas pracy z kod
 - Zmiany wprowadzane są na serwerze lokalnym z podpiętą domeną
 - Użytkownik ma stały podgląd strony w przeglądarce
 - Nie trzeba uruchamiać `npm run dev` - wystarczy `npm run build` po zmianach
+- Ruch na serwer jest kierowany przez Cloudflare (stąd nginx w błędach 404)
+- Używamy HashRouter zamiast BrowserRouter (bez konfiguracji serwera)
 
 ## Wielojęzyczność
 
-- Wszystkie zmiany tekstów wprowadzaj zarówno do wersji polskiej (`src/locales/pl.ts`) jak i angielskiej (`src/locales/en.ts`)
+- Wszystkie zmiany tekstów wprowadzaj do każdej wersji językowej:
+  - Polskiej (`src/locales/pl.ts`)
+  - Angielskiej (`src/locales/en.ts`)
+  - Niemieckiej (`src/locales/de.ts`)
 
 ## Polecenia budowania
 
@@ -41,7 +46,7 @@ To jest strona landing page w React + TypeScript dla "WM Tyres" (serwis opon do 
 - `src/lib/utils.ts` - Narzędzie `cn()` do łączenia klas Tailwind
 - `src/integrations/supabase/` - Klient Supabase i automatycznie generowane typy
 - `src/contexts/` - Konteksty React (LanguageContext dla i18n)
-- `src/locales/` - Pliki tłumaczeń (pl.ts, en.ts)
+- `src/locales/` - Pliki tłumaczeń (pl.ts, en.ts, de.ts)
 
 ### Kluczowe wzorce
 - React Router do routingu (dodawaj trasy w `App.tsx` powyżej catch-all `*`)
