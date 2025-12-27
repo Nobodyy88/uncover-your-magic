@@ -279,6 +279,33 @@ export const pl = {
         },
       },
     },
+    serviceContract: {
+      title: "UMOWA SERWISOWA",
+      subtitle: "Serwis WM Tyres",
+      sections: {
+        individual: {
+          title: "Indywidualne umowy serwisowe zapewniające maksymalny spokój ducha",
+          description: "W WM Tyres rozumiemy, że każda firma ma inne potrzeby. Dlatego oferujemy elastyczne umowy serwisowe, w pełni dostosowane do Twojej floty, maszyn i sposobu użytkowania. Niezależnie od tego, czy działasz w branży budowlanej, transportowej, rolniczej czy przemysłowej — nasze umowy są stworzone po to, abyś mógł działać bez przeszkód.",
+        },
+        predictable: {
+          title: "Przewidywalne koszty, bez niespodzianek",
+          description: "Umowa serwisowa zapewnia pełną kontrolę nad kosztami konserwacji. Dzięki stałym stawkom i jasnym umowom unikasz nieoczekiwanych wydatków i przestojów. To ekonomiczny sposób na zapewnienie, że Twoje opony są zawsze w doskonałym stanie.",
+        },
+        priority: {
+          title: "Priorytetowa obsługa i szybka reakcja",
+          description: "Klienci kontraktowi otrzymują priorytetowe traktowanie, szybszy czas reakcji, gwarantowaną dostępność i bezpośredni dostęp do naszego zespołu ekspertów ds. wsparcia technicznego. Niezależnie od tego, czy chodzi o naprawę, przegląd czy wymianę — jesteśmy gotowi, gdy nas potrzebujesz.",
+        },
+        partner: {
+          title: "Jeden partner, kompleksowe wsparcie",
+          description: "Dzięki umowie serwisowej WM Tyres zyskujesz jednego, niezawodnego partnera, który zaspokoi wszystkie Twoje potrzeby związane z oponami w całej Europie. Zajmujemy się wszystkim – od monitorowania i konserwacji po reagowanie w sytuacjach awaryjnych – dzięki czemu możesz skupić się na prowadzeniu swojej działalności.",
+        },
+      },
+      cta: {
+        title: "Kontakt",
+        description: "Skontaktuj się z WM Tyres już dziś, aby uzyskać fachową poradę, szybką obsługę i niezawodne wsparcie niezależnie od tego, gdzie pracują Twoje maszyny.",
+        button: "Skontaktuj się z nami",
+      },
+    },
   },
   meta: {
     title: "WM Tyres - Profesjonalna wymiana opon maszyn budowlanych",

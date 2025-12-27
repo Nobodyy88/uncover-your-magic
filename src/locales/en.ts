@@ -281,6 +281,33 @@ export const en: Translations = {
         },
       },
     },
+    serviceContract: {
+      title: "SERVICE CONTRACT",
+      subtitle: "WM Tyres Service",
+      sections: {
+        individual: {
+          title: "Individual service contracts ensuring maximum peace of mind",
+          description: "At WM Tyres, we understand that every company has different needs. That's why we offer flexible service contracts, fully tailored to your fleet, machinery, and usage patterns. Whether you operate in construction, transportation, agriculture, or industry — our contracts are designed so you can operate without interruptions.",
+        },
+        predictable: {
+          title: "Predictable costs, no surprises",
+          description: "A service contract provides full control over maintenance costs. With fixed rates and clear agreements, you avoid unexpected expenses and downtime. It's an economical way to ensure your tires are always in perfect condition.",
+        },
+        priority: {
+          title: "Priority service and fast response",
+          description: "Contract customers receive priority treatment, faster response times, guaranteed availability, and direct access to our technical support team. Whether it's repair, inspection, or replacement — we're ready when you need us.",
+        },
+        partner: {
+          title: "One partner, comprehensive support",
+          description: "With a WM Tyres service contract, you gain one reliable partner who will meet all your tire needs across Europe. We handle everything — from monitoring and maintenance to emergency response — so you can focus on running your business.",
+        },
+      },
+      cta: {
+        title: "Contact",
+        description: "Contact WM Tyres today to receive expert advice, fast service, and reliable support no matter where your machines operate.",
+        button: "Contact us",
+      },
+    },
   },
   meta: {
     title: "WM Tyres - Professional construction machinery tire service",

@@ -281,6 +281,33 @@ export const de: Translations = {
         },
       },
     },
+    serviceContract: {
+      title: "SERVICEVERTRAG",
+      subtitle: "WM Tyres Service",
+      sections: {
+        individual: {
+          title: "Individuelle Serviceverträge für maximale Sicherheit",
+          description: "Bei WM Tyres verstehen wir, dass jedes Unternehmen unterschiedliche Anforderungen hat. Deshalb bieten wir flexible Serviceverträge an, die vollständig auf Ihre Flotte, Maschinen und Nutzungsweise abgestimmt sind. Ob Sie im Bauwesen, Transport, in der Landwirtschaft oder Industrie tätig sind – unsere Verträge sind so konzipiert, dass Sie ohne Unterbrechungen arbeiten können.",
+        },
+        predictable: {
+          title: "Planbare Kosten, keine Überraschungen",
+          description: "Ein Servicevertrag bietet volle Kontrolle über die Wartungskosten. Mit festen Tarifen und klaren Vereinbarungen vermeiden Sie unerwartete Ausgaben und Ausfallzeiten. Es ist eine wirtschaftliche Möglichkeit, sicherzustellen, dass Ihre Reifen immer in einwandfreiem Zustand sind.",
+        },
+        priority: {
+          title: "Prioritätsservice und schnelle Reaktion",
+          description: "Vertragskunden erhalten eine bevorzugte Behandlung, schnellere Reaktionszeiten, garantierte Verfügbarkeit und direkten Zugang zu unserem technischen Support-Team. Ob Reparatur, Inspektion oder Austausch – wir sind bereit, wenn Sie uns brauchen.",
+        },
+        partner: {
+          title: "Ein Partner, umfassende Unterstützung",
+          description: "Mit einem WM Tyres Servicevertrag gewinnen Sie einen zuverlässigen Partner, der alle Ihre Reifenanforderungen in ganz Europa erfüllt. Wir kümmern uns um alles – von der Überwachung und Wartung bis zur Notfallreaktion – damit Sie sich auf Ihr Geschäft konzentrieren können.",
+        },
+      },
+      cta: {
+        title: "Kontakt",
+        description: "Kontaktieren Sie WM Tyres noch heute, um fachkundige Beratung, schnellen Service und zuverlässige Unterstützung zu erhalten, egal wo Ihre Maschinen arbeiten.",
+        button: "Kontaktieren Sie uns",
+      },
+    },
   },
   meta: {
     title: "WM Tyres - Professioneller Reifenservice für Baumaschinen",
