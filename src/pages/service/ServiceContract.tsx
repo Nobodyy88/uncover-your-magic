@@ -11,18 +11,18 @@ const ServiceContract = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-primary">
-        <div className="container mx-auto px-4">
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-center text-black">
-            {t.pages.serviceContract.title}
-          </h1>
-        </div>
-      </section>
+      {/* Main content */}
+      <section className="pt-32 pb-16 bg-gradient-dark relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(25,95%,53%,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_hsl(35,100%,50%,0.1),transparent_50%)]" />
 
-      {/* Section 1 - Individual contracts */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-2">
+              {t.pages.serviceContract.title}
+            </h1>
+          </div>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="order-2 md:order-1">
               <img
