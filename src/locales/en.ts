@@ -263,6 +263,7 @@ export const en: Translations = {
     copyright: "WM Tyres. All rights reserved.",
   },
   pages: {
+    comingSoon: "Page content coming soon...",
     tires: {
       title: "TIRES",
       subtitle: "WM Tyres Products",
@@ -306,6 +307,24 @@ export const en: Translations = {
         title: "Contact",
         description: "Contact WM Tyres today to receive expert advice, fast service, and reliable support no matter where your machines operate.",
         button: "Contact us",
+      },
+    },
+    rideOn: {
+      title: "RIDE ON",
+      subtitle: "WM Tyres Products",
+      features: {
+        protection: {
+          title: "Protection against punctures and downtime",
+          description: "Ride-On is an advanced tire sealant system that instantly protects against pressure loss in case of puncture. This keeps your machines running without downtime, and repair costs drop dramatically. Ride-On works proactively — it protects the tire before damage even occurs.",
+        },
+        longevity: {
+          title: "Extends tire life by up to 25%",
+          description: "Ride-On TWC® (Tire & Wheel Care) not only seals punctures, but also protects rims from corrosion and minimizes the effects of underinflation. Even mass distribution in the tire reduces vibrations and decreases tread wear, extending tire life by up to 25%.",
+        },
+        savings: {
+          title: "Time and cost savings",
+          description: "Machines equipped with Ride-On require significantly less tire-related maintenance. Fewer repairs, lower fuel consumption thanks to proper pressure, and no unplanned downtime translate into tangible savings and greater productivity for your fleet.",
+        },
       },
     },
   },

@@ -261,6 +261,7 @@ export const pl = {
     copyright: "WM Tyres. Wszelkie prawa zastrzeżone.",
   },
   pages: {
+    comingSoon: "Treść strony w przygotowaniu...",
     tires: {
       title: "OPONY",
       subtitle: "Produkty WM Tyres",
@@ -304,6 +305,24 @@ export const pl = {
         title: "Kontakt",
         description: "Skontaktuj się z WM Tyres już dziś, aby uzyskać fachową poradę, szybką obsługę i niezawodne wsparcie niezależnie od tego, gdzie pracują Twoje maszyny.",
         button: "Skontaktuj się z nami",
+      },
+    },
+    rideOn: {
+      title: "RIDE ON",
+      subtitle: "Produkty WM Tyres",
+      features: {
+        protection: {
+          title: "Ochrona przed przebiciami i przestojami",
+          description: "Ride-On to zaawansowany system uszczelniający do opon, który natychmiastowo zabezpiecza przed utratą ciśnienia w przypadku przebicia. Dzięki temu Twoje maszyny pracują bez przestojów, a koszty napraw drastycznie maleją. Ride-On działa proaktywnie — zabezpiecza oponę jeszcze zanim dojdzie do uszkodzenia.",
+        },
+        longevity: {
+          title: "Przedłużenie żywotności opon nawet o 25%",
+          description: "Ride-On TWC® (Tire & Wheel Care) nie tylko uszczelnia przebicia, ale także chroni felgi przed korozją i minimalizuje skutki niedopompowania. Równomierne rozkładanie masy w oponie redukuje wibracje i zmniejsza zużycie bieżnika, przedłużając żywotność opon o nawet 25%.",
+        },
+        savings: {
+          title: "Oszczędność czasu i pieniędzy",
+          description: "Maszyny wyposażone w Ride-On wymagają znacznie mniej obsługi technicznej związanej z oponami. Rzadsze naprawy, mniejsze zużycie paliwa dzięki prawidłowemu ciśnieniu oraz brak nieplanowanych przestojów przekładają się na wymierne oszczędności i większą produktywność Twojej floty.",
+        },
       },
     },
   },

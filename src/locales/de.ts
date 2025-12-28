@@ -263,6 +263,7 @@ export const de: Translations = {
     copyright: "WM Tyres. Alle Rechte vorbehalten.",
   },
   pages: {
+    comingSoon: "Seiteninhalt in Vorbereitung...",
     tires: {
       title: "REIFEN",
       subtitle: "WM Tyres Produkte",
@@ -306,6 +307,24 @@ export const de: Translations = {
         title: "Kontakt",
         description: "Kontaktieren Sie WM Tyres noch heute, um fachkundige Beratung, schnellen Service und zuverlässige Unterstützung zu erhalten, egal wo Ihre Maschinen arbeiten.",
         button: "Kontaktieren Sie uns",
+      },
+    },
+    rideOn: {
+      title: "RIDE ON",
+      subtitle: "WM Tyres Produkte",
+      features: {
+        protection: {
+          title: "Schutz vor Reifenpannen und Ausfallzeiten",
+          description: "Ride-On ist ein fortschrittliches Reifendichtmittelsystem, das sofort vor Druckverlust bei Reifenpannen schützt. Dadurch laufen Ihre Maschinen ohne Ausfallzeiten weiter, und die Reparaturkosten sinken drastisch. Ride-On arbeitet proaktiv — es schützt den Reifen, bevor überhaupt ein Schaden auftritt.",
+        },
+        longevity: {
+          title: "Verlängert die Reifenlebensdauer um bis zu 25%",
+          description: "Ride-On TWC® (Tire & Wheel Care) dichtet nicht nur Reifenpannen ab, sondern schützt auch Felgen vor Korrosion und minimiert die Auswirkungen von Unterdruck. Die gleichmäßige Massenverteilung im Reifen reduziert Vibrationen und verringert den Profilabrieb, wodurch die Reifenlebensdauer um bis zu 25% verlängert wird.",
+        },
+        savings: {
+          title: "Zeit- und Kostenersparnis",
+          description: "Maschinen mit Ride-On benötigen deutlich weniger reifenbezogene Wartung. Weniger Reparaturen, geringerer Kraftstoffverbrauch dank richtigem Druck und keine ungeplanten Ausfallzeiten führen zu spürbaren Einsparungen und höherer Produktivität Ihrer Flotte.",
+        },
       },
     },
   },
