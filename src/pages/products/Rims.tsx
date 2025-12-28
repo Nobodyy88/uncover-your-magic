@@ -25,7 +25,7 @@ const Rims = () => {
 
           <div className="max-w-4xl mx-auto">
             <p className="text-muted-foreground text-lg leading-relaxed text-center">
-              Treść strony w przygotowaniu...
+              {t.pages.comingSoon}
             </p>
           </div>
         </div>

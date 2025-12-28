@@ -2,10 +2,21 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ServiceContract = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleContactClick = () => {
+    navigate("/");
+    setTimeout(() => {
+      const element = document.getElementById("kontakt");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,11 +154,13 @@ const ServiceContract = () => {
             <p className="text-muted-foreground text-lg mb-8">
               {t.pages.serviceContract.cta.description}
             </p>
-            <Link to="/#kontakt">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-black font-semibold px-8">
-                {t.pages.serviceContract.cta.button}
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-black font-semibold px-8"
+              onClick={handleContactClick}
+            >
+              {t.pages.serviceContract.cta.button}
+            </Button>
           </div>
         </div>
       </section>
