@@ -250,7 +250,7 @@ const Dashboard = () => {
                   <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mb-2">
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <CardTitle>{page.title}</CardTitle>
+                  <CardTitle className="font-sans font-semibold normal-case">{page.title}</CardTitle>
                   <CardDescription>
                     {page.sections.length} {page.sections.length === 1 ? 'sekcja' : 'sekcje'}
                   </CardDescription>

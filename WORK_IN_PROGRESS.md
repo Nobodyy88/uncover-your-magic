@@ -248,21 +248,58 @@ Przetestuj panel admina:
 - ✅ Funkcja eksportu do plików
 - ✅ Przycisk "Wyczyść cache"
 - ✅ Usunięcie starych komponentów panelu
+- ✅ Poprawki UX: czytelne czcionki i rozszerzone wskazówki
+
+---
+
+## 🔧 Poprawki UX panelu (2025-12-29)
+
+### Problem: Nieczytelne czcionki
+**Objawy:** Tytuły stron (INDEX, REGENERACJA, etc.) wyświetlane pogrubionym fontem Bebas Neue w uppercase
+
+**Rozwiązanie:**
+1. Zmieniono czcionkę kart stron z `Bebas Neue` (font-display) na `Inter` (font-sans)
+2. Dodano klasę `normal-case` do CardTitle w Dashboard
+3. Zmieniono wszystkie nagłówki panelu na `font-sans`
+
+**Pliki zmienione:**
+- `src/pages/admin/Dashboard.tsx` - CardTitle z `font-sans normal-case`
+- `src/pages/admin/PageEditor.tsx` - wszystkie nagłówki `font-sans`
+
+### Rozszerzone wskazówki dla początkującego admina
+
+**Dodano w Dashboard.tsx:**
+- Card z Accordion "Jak korzystać z panelu"
+  - 🎯 Jak edytować treść strony? (6 kroków)
+  - 💡 Ważne wskazówki (6 punktów)
+  - 🆘 Co zrobić gdy coś nie działa? (4 rozwiązania)
+
+**Dodano w PageEditor.tsx:**
+- Alert z wskazówkami na górze edytora (4 punkty)
+- Tooltips na przyciskach:
+  - "Podgląd" → "Otwiera stronę w nowej karcie"
+  - "Wyczyść cache" → "Usuwa cache aby zobaczyć najnowsze zmiany"
+  - "Zapisz" → "Zapisuje wszystkie edytowane teksty"
+- Wykrywanie niezapisanych zmian:
+  - Ostrzeżenie przeglądarki przy opuszczaniu strony
+  - Wizualna zmiana przycisku "Zapisz"
+
+**Status:** ✅ Panel przyjazny dla początkujących
 
 ---
 
 ## 💾 Ostatnie commity
 
 ```
-22b34b0 - Przeprojektuj panel administracyjny według Wariantu A (2025-12-29)
+(następny) - Napraw czcionki na kartach stron (font-sans normal-case)
+9df4c17 - Poprawa UX panelu: czytelniejsze czcionki i rozszerzone wskazówki
+10cfd51 - Aktualizuj dokumentację - Wariant A ukończony
+22b34b0 - Przeprojektuj panel administracyjny według Wariantu A
 4df722e - Napraw krytyczną awarię strony głównej i przywróć Supabase
-bd305eb - Pilna naprawa: przywróć działanie strony głównej (NIE DZIAŁAŁO)
-5d8a55b - Dodaj szczegółowe logowanie debugowania
-fecc471 - Dodaj pełny panel administracyjny dla WM Tyres
 ```
 
 ---
 
 **KONIEC DOKUMENTU**
 
-Strona działa! Panel admina działa! Teraz można przeprojektować interfejs panelu (Wariant A). 🎉
+✅ Strona działa! Panel admina działa z czytelnymi czcionkami i szczegółowymi wskazówkami! 🎉
