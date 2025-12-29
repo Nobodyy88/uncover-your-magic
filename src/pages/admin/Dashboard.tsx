@@ -99,11 +99,11 @@ const Dashboard = () => {
         {/* Info Box */}
         <Card className="bg-primary/5 border-primary/20">
           <CardHeader>
-            <CardTitle className="text-lg">🚧 Panel w budowie</CardTitle>
+            <CardTitle className="text-lg">✅ Panel gotowy do użycia</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Panel administracyjny jest obecnie w fazie implementacji. Wkrótce dostępne będą pełne funkcje edycji treści.
+            <p className="text-sm text-muted-foreground mb-4">
+              Panel administracyjny jest w pełni funkcjonalny. Możesz edytować tłumaczenia i treści podstron.
             </p>
             <ul className="mt-4 space-y-2 text-sm">
               <li className="flex items-center gap-2">
@@ -115,14 +115,23 @@ const Dashboard = () => {
                 <span>Baza danych i migracja tłumaczeń</span>
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-yellow-500">🔄</span>
-                <span>Edytor tłumaczeń (w budowie)</span>
+                <span className="text-green-500">✅</span>
+                <span>Edytor tłumaczeń (157 kluczy, 3 języki)</span>
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-yellow-500">🔄</span>
-                <span>Edytor podstron (w budowie)</span>
+                <span className="text-green-500">✅</span>
+                <span>Edytor podstron (4 strony do wypełnienia)</span>
               </li>
             </ul>
+
+            <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-900">
+              <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2">
+                ⚠️ Ważne: Naprawa polityk RLS
+              </p>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                Jeśli widzisz błąd "infinite recursion", przeczytaj plik <code>ADMIN_FIX_RLS.md</code> w katalogu głównym projektu.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </main>
