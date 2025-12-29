@@ -21,6 +21,29 @@ Ten plik zawiera wskazówki dla Claude Code (claude.ai/code) podczas pracy z kod
   - Angielskiej (`src/locales/en.ts`)
   - Niemieckiej (`src/locales/de.ts`)
 
+### Migracja tłumaczeń do Supabase
+
+**KRYTYCZNE: Po każdej zmianie w plikach tłumaczeń ZAWSZE uruchom:**
+
+```bash
+npm run migrate:translations
+```
+
+**Kiedy uruchamiać migrację:**
+- ✅ Po dodaniu nowych kluczy do `src/locales/*.ts`
+- ✅ Po wypełnieniu treścią pustych podstron (Naprawy, Felgi, Regeneracja, Montaż)
+- ✅ Po dodaniu nowych sekcji do istniejących stron
+- ✅ Po zmianach strukturalnych w tłumaczeniach
+
+**Workflow:**
+1. Edytujesz pliki `src/locales/pl.ts`, `en.ts`, `de.ts`
+2. Uruchamiasz `npm run migrate:translations`
+3. Tłumaczenia trafiają do bazy Supabase
+4. Panel administracyjny automatycznie je wykrywa
+5. Właściciel może teraz edytować te teksty przez panel
+
+**Ważne:** Bez migracji zmiany będą widoczne tylko w kodzie, ale NIE w panelu administracyjnym!
+
 ## Polecenia budowania
 
 ```bash
