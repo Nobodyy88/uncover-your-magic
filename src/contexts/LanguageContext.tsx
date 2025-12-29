@@ -34,7 +34,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   });
 
   const [translations, setTranslations] = useState<Record<Language, Translations>>(staticTranslations);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
@@ -45,7 +45,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadTranslations = async () => {
       console.log('🔍 [LanguageContext] Starting translation loading...');
-      setIsLoading(true);
+      // NIE ustawiamy isLoading=true, ponieważ już mamy statyczne tłumaczenia
+      // Strona może się renderować natychmiast, a tłumaczenia z Supabase zaktualizują się w tle
 
       try {
         // Sprawdź cache dla wszystkich języków
@@ -62,7 +63,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
             en: cachedEn,
             de: cachedDe,
           });
-          setIsLoading(false);
           return;
         }
 
@@ -75,9 +75,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         if (error) {
           console.error('❌ [LanguageContext] Error fetching translations from Supabase:', error);
           console.log('📄 [LanguageContext] Falling back to static translations');
-          // Fallback do statycznych
+          // Fallback do statycznych (już jest ustawiony, ale dla pewności)
           setTranslations(staticTranslations);
-          setIsLoading(false);
           return;
         }
 
@@ -110,11 +109,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error('❌ [LanguageContext] Error loading translations:', error);
         console.log('📄 [LanguageContext] Falling back to static translations');
-        // Fallback do statycznych
+        // Fallback do statycznych (już jest ustawiony, ale dla pewności)
         setTranslations(staticTranslations);
       } finally {
         console.log('🏁 [LanguageContext] Translation loading complete');
-        setIsLoading(false);
       }
     };
 

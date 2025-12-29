@@ -1,7 +1,17 @@
 import type { Tables } from '@/integrations/supabase/types';
+import { pl, Translations } from '@/locales/pl';
+import { en } from '@/locales/en';
+import { de } from '@/locales/de';
 
 type TranslationRecord = Tables<'translations'>;
 type Language = 'pl' | 'en' | 'de';
+
+// Mapa fallbacków dla każdego języka
+const staticFallbacks: Record<Language, Translations> = {
+  pl,
+  en,
+  de,
+};
 
 /**
  * Konwertuje płaskie rekordy z bazy danych na zagnieżdżony obiekt tłumaczeń
@@ -13,8 +23,14 @@ type Language = 'pl' | 'en' | 'de';
 export function buildTranslationsObject(
   records: TranslationRecord[],
   language: Language
-): Record<string, unknown> {
+): Translations {
   console.log(`🔨 [buildTranslationsObject] Building ${language} from ${records.length} records`);
+
+  // Jeśli brak rekordów, zwróć statyczny fallback
+  if (!records || records.length === 0) {
+    console.warn(`⚠️ [buildTranslationsObject] No records for ${language}, using static fallback`);
+    return staticFallbacks[language];
+  }
 
   try {
     const result: Record<string, unknown> = {};
@@ -91,11 +107,11 @@ export function buildTranslationsObject(
     }
 
     console.log(`✅ [buildTranslationsObject] Successfully built ${language} with ${Object.keys(result).length} top-level keys`);
-    return result;
+    return result as Translations;
   } catch (error) {
     console.error(`❌ [buildTranslationsObject] Fatal error building ${language}:`, error);
-    // Zwróć pusty obiekt zamiast crashować
-    return {};
+    // Zwróć statyczny fallback zamiast pustego obiektu
+    return staticFallbacks[language];
   }
 }
 
@@ -162,14 +178,14 @@ const CACHE_PREFIX = 'translations_cache_';
 const CACHE_DURATION = 60 * 60 * 1000; // 1 godzina w milisekundach
 
 interface CacheEntry {
-  data: Record<string, unknown>;
+  data: Translations;
   timestamp: number;
 }
 
 /**
  * Pobierz tłumaczenia z cache
  */
-export function getCachedTranslations(language: Language): Record<string, unknown> | null {
+export function getCachedTranslations(language: Language): Translations | null {
   try {
     const cached = localStorage.getItem(`${CACHE_PREFIX}${language}`);
     if (!cached) {
@@ -203,7 +219,7 @@ export function getCachedTranslations(language: Language): Record<string, unknow
 /**
  * Zapisz tłumaczenia do cache
  */
-export function setCachedTranslations(language: Language, data: Record<string, unknown>): void {
+export function setCachedTranslations(language: Language, data: Translations): void {
   try {
     const entry: CacheEntry = {
       data,
