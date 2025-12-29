@@ -48,9 +48,9 @@ const Hero = () => {
 
             {/* Headline */}
             <h1 className="font-display leading-[1.1] mb-4" style={{ fontSize: 'clamp(1.5rem, 5vw, 3.75rem)' }}>
-              <span className="block text-foreground">{t.hero.headline1}</span>
-              <span className="block text-gradient">{t.hero.headline2}</span>
-              <span className="block text-gradient">{t.hero.headline2b}</span>
+              <span className="block text-foreground xl:whitespace-nowrap">{t.hero.headline1}</span>
+              <span className="block text-gradient xl:whitespace-nowrap">{t.hero.headline2}</span>
+              <span className="block text-gradient xl:whitespace-nowrap">{t.hero.headline2b}</span>
             </h1>
 
             {/* Subheadline */}
