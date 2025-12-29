@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyczyść Cache - WM Tyres</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #e55a00;
+        }
+        .success {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        .info {
+            background: #2196f3;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Wyczyść Cache Tłumaczeń</h1>
+
+        <div class="info">
+            <strong>Ten skrypt wyczyści:</strong>
+            <ul>
+                <li>Cache tłumaczeń w localStorage (pl, en, de)</li>
+                <li>Preferowany język</li>
+                <li>Wszystkie inne dane związane ze stroną</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button onclick="clearTranslationCache()">Wyczyść tylko cache tłumaczeń</button>
+            <button onclick="clearAllLocalStorage()">Wyczyść całe localStorage</button>
+            <button onclick="hardReload()">Wymuś pełne przeładowanie (Ctrl+F5)</button>
+        </div>
+
+        <div id="success" class="success"></div>
+
+        <h3 style="margin-top: 30px;">Zawartość localStorage:</h3>
+        <pre id="localStorageContent"></pre>
+    </div>
+
+    <script>
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateLocalStorageDisplay() {
+            const content = document.getElementById('localStorageContent');
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                data[key] = localStorage.getItem(key)?.substring(0, 100) + '...';
+            }
+            content.textContent = JSON.stringify(data, null, 2);
+        }
+
+        function clearTranslationCache() {
+            localStorage.removeItem('translations_cache_pl');
+            localStorage.removeItem('translations_cache_en');
+            localStorage.removeItem('translations_cache_de');
+            showSuccess('✅ Cache tłumaczeń wyczyszczony!');
+            updateLocalStorageDisplay();
+        }
+
+        function clearAllLocalStorage() {
+            localStorage.clear();
+            showSuccess('✅ Całe localStorage wyczyszczone!');
+            updateLocalStorageDisplay();
+        }
+
+        function hardReload() {
+            showSuccess('🔄 Wymuszam pełne przeładowanie...');
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 500);
+        }
+
+        // Pokaż zawartość przy załadowaniu
+        updateLocalStorageDisplay();
+    </script>
+</body>
+</html>

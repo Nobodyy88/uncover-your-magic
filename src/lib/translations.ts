@@ -36,82 +36,78 @@ export function buildTranslationsObject(
     const result: Record<string, unknown> = {};
     const valueKey = `value_${language}` as keyof TranslationRecord;
 
-    // Najpierw grupujemy po parent_key dla tablic
-    const arrays: Record<string, TranslationRecord[]> = {};
-
+    // Przetwórz wszystkie rekordy
     for (const record of records) {
-      if (record.is_array && record.parent_key) {
-        if (!arrays[record.parent_key]) {
-          arrays[record.parent_key] = [];
-        }
-        arrays[record.parent_key].push(record);
-      }
+      const key = record.key;
+      const value = record[valueKey] as string;
+
+      setValue(result, key, value || '');
     }
 
-    // Sortujemy elementy tablic według array_index
-    for (const key in arrays) {
-      arrays[key].sort((a, b) => (a.array_index || 0) - (b.array_index || 0));
-    }
-
-    // Teraz przetwarzamy wszystkie rekordy
-    for (const record of records) {
-      try {
-        const keys = record.key.split('.');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let current: any = result;
-
-        // Nawiguj przez zagnieżdżoną strukturę
-        for (let i = 0; i < keys.length - 1; i++) {
-          const key = keys[i];
-          if (!current[key]) {
-            current[key] = {};
-          }
-          current = current[key];
-        }
-
-        const lastKey = keys[keys.length - 1];
-
-        // Jeśli to element tablicy, przetwarzamy całą tablicę
-        if (record.is_array && record.parent_key) {
-          // Sprawdź czy to tablica obiektów czy prostych wartości
-          const arrayItems = arrays[record.parent_key];
-          if (arrayItems && arrayItems.length > 0) {
-            // Próbuj parsować jako JSON (dla obiektów)
-            const parsedArray = arrayItems.map(item => {
-              const value = item[valueKey] as string;
-              if (!value) return '';
-
-              try {
-                // Jeśli wartość wygląda jak JSON, parsuj ją
-                if (value.trim().startsWith('{')) {
-                  return JSON.parse(value);
-                }
-              } catch (parseError) {
-                console.warn(`⚠️ [buildTranslationsObject] Failed to parse JSON for key ${item.key}:`, parseError);
-                // Jeśli nie można sparsować, zwróć jako string
-              }
-              return value;
-            });
-
-            current[lastKey] = parsedArray;
-          }
-        } else if (!record.is_array) {
-          // Proste wartości
-          const value = record[valueKey] as string;
-          current[lastKey] = value || '';
-        }
-      } catch (recordError) {
-        console.error(`❌ [buildTranslationsObject] Error processing record ${record.key}:`, recordError);
-        // Kontynuuj z następnym rekordem
-      }
-    }
-
-    console.log(`✅ [buildTranslationsObject] Successfully built ${language} with ${Object.keys(result).length} top-level keys`);
+    console.log(`✅ [buildTranslationsObject] Successfully built ${language}`);
     return result as Translations;
   } catch (error) {
     console.error(`❌ [buildTranslationsObject] Fatal error building ${language}:`, error);
     // Zwróć statyczny fallback zamiast pustego obiektu
     return staticFallbacks[language];
+  }
+}
+
+/**
+ * Pomocnicza funkcja do ustawiania zagnieżdżonych wartości
+ * Obsługuje klucze z nawiasami kwadratowymi typu: services.items[0].title
+ */
+function setValue(obj: Record<string, unknown>, path: string, value: string): void {
+  // Parsuj klucz z uwzględnieniem nawiasów kwadratowych
+  // np. "services.items[0].title" -> ["services", "items", "0", "title"]
+  const keys = path.split(/\.|\[|\]/).filter(k => k !== '');
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let current: any = obj;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    const nextKey = keys[i + 1];
+
+    // Sprawdź czy następny klucz jest numerem (element tablicy)
+    const isNextKeyNumeric = /^\d+$/.test(nextKey);
+
+    if (/^\d+$/.test(key)) {
+      // Aktualny klucz jest numerem - ustawiamy w tablicy
+      const index = parseInt(key);
+
+      if (!Array.isArray(current)) {
+        console.warn(`Expected array at ${keys.slice(0, i).join('.')}`);
+        return;
+      }
+
+      if (!current[index]) {
+        current[index] = isNextKeyNumeric ? [] : {};
+      }
+      current = current[index];
+    } else {
+      // Aktualny klucz jest stringiem
+      if (!current[key]) {
+        current[key] = isNextKeyNumeric ? [] : {};
+      }
+      current = current[key];
+    }
+  }
+
+  // Ustaw wartość końcową
+  const lastKey = keys[keys.length - 1];
+
+  if (/^\d+$/.test(lastKey)) {
+    // Ostatni klucz jest numerem - ustaw w tablicy
+    const index = parseInt(lastKey);
+    if (!Array.isArray(current)) {
+      console.warn(`Expected array for index ${index}`);
+      return;
+    }
+    current[index] = value;
+  } else {
+    // Ostatni klucz jest stringiem
+    current[lastKey] = value;
   }
 }
 
@@ -194,6 +190,13 @@ export function getCachedTranslations(language: Language): Translations | null {
     }
 
     const entry: CacheEntry = JSON.parse(cached);
+
+    // Walidacja: sprawdź czy entry ma poprawną strukturę
+    if (!entry || typeof entry !== 'object' || !entry.data || typeof entry.timestamp !== 'number') {
+      console.warn(`⚠️ [getCachedTranslations] Invalid cache structure for ${language}`);
+      localStorage.removeItem(`${CACHE_PREFIX}${language}`);
+      return null;
+    }
 
     if (!isCacheValid(entry.timestamp)) {
       // Cache wygasł

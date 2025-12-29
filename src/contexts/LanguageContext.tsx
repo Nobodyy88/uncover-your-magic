@@ -45,8 +45,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadTranslations = async () => {
       console.log('🔍 [LanguageContext] Starting translation loading...');
-      // NIE ustawiamy isLoading=true, ponieważ już mamy statyczne tłumaczenia
-      // Strona może się renderować natychmiast, a tłumaczenia z Supabase zaktualizują się w tle
 
       try {
         // Sprawdź cache dla wszystkich języków
@@ -75,7 +73,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         if (error) {
           console.error('❌ [LanguageContext] Error fetching translations from Supabase:', error);
           console.log('📄 [LanguageContext] Falling back to static translations');
-          // Fallback do statycznych (już jest ustawiony, ale dla pewności)
           setTranslations(staticTranslations);
           return;
         }
@@ -84,13 +81,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
         if (data && data.length > 0) {
           console.log('🔨 [LanguageContext] Building translation objects...');
-          // Zbuduj obiekty dla każdego języka
           const plTranslations = buildTranslationsObject(data, 'pl');
           const enTranslations = buildTranslationsObject(data, 'en');
           const deTranslations = buildTranslationsObject(data, 'de');
 
           console.log('💾 [LanguageContext] Caching translations...');
-          // Zapisz w cache
           setCachedTranslations('pl', plTranslations);
           setCachedTranslations('en', enTranslations);
           setCachedTranslations('de', deTranslations);
@@ -103,13 +98,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
           });
         } else {
           console.log('⚠️ [LanguageContext] No data in database, using static translations');
-          // Brak danych w bazie, użyj statycznych
           setTranslations(staticTranslations);
         }
       } catch (error) {
         console.error('❌ [LanguageContext] Error loading translations:', error);
         console.log('📄 [LanguageContext] Falling back to static translations');
-        // Fallback do statycznych (już jest ustawiony, ale dla pewności)
         setTranslations(staticTranslations);
       } finally {
         console.log('🏁 [LanguageContext] Translation loading complete');

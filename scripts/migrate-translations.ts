@@ -79,9 +79,10 @@ function flattenObject(
     if (Array.isArray(value)) {
       value.forEach((item, index) => {
         if (typeof item === 'object' && item !== null) {
+          // Dla tablic obiektów, dodaj [index] do klucza
           flattenObject(
             item,
-            fullKey,
+            `${fullKey}[${index}]`,
             result,
             currentCategory,
             index,
