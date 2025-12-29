@@ -44,16 +44,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // Pobierz tłumaczenia z Supabase z cache
   useEffect(() => {
     const loadTranslations = async () => {
+      console.log('🔍 [LanguageContext] Starting translation loading...');
       setIsLoading(true);
 
       try {
         // Sprawdź cache dla wszystkich języków
+        console.log('📦 [LanguageContext] Checking cache...');
         const cachedPl = getCachedTranslations('pl');
         const cachedEn = getCachedTranslations('en');
         const cachedDe = getCachedTranslations('de');
 
         // Jeśli wszystkie w cache, użyj ich
         if (cachedPl && cachedEn && cachedDe) {
+          console.log('✅ [LanguageContext] Using cached translations');
           setTranslations({
             pl: cachedPl,
             en: cachedEn,
@@ -64,43 +67,53 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
 
         // Pobierz z Supabase
+        console.log('🌐 [LanguageContext] Fetching from Supabase...');
         const { data, error } = await supabase
           .from('translations')
           .select('*');
 
         if (error) {
-          console.error('Error fetching translations from Supabase:', error);
+          console.error('❌ [LanguageContext] Error fetching translations from Supabase:', error);
+          console.log('📄 [LanguageContext] Falling back to static translations');
           // Fallback do statycznych
           setTranslations(staticTranslations);
           setIsLoading(false);
           return;
         }
 
+        console.log(`✅ [LanguageContext] Fetched ${data?.length || 0} translation records`);
+
         if (data && data.length > 0) {
+          console.log('🔨 [LanguageContext] Building translation objects...');
           // Zbuduj obiekty dla każdego języka
           const plTranslations = buildTranslationsObject(data, 'pl');
           const enTranslations = buildTranslationsObject(data, 'en');
           const deTranslations = buildTranslationsObject(data, 'de');
 
+          console.log('💾 [LanguageContext] Caching translations...');
           // Zapisz w cache
           setCachedTranslations('pl', plTranslations);
           setCachedTranslations('en', enTranslations);
           setCachedTranslations('de', deTranslations);
 
+          console.log('✅ [LanguageContext] Translations loaded successfully from Supabase');
           setTranslations({
             pl: plTranslations,
             en: enTranslations,
             de: deTranslations,
           });
         } else {
+          console.log('⚠️ [LanguageContext] No data in database, using static translations');
           // Brak danych w bazie, użyj statycznych
           setTranslations(staticTranslations);
         }
       } catch (error) {
-        console.error('Error loading translations:', error);
+        console.error('❌ [LanguageContext] Error loading translations:', error);
+        console.log('📄 [LanguageContext] Falling back to static translations');
         // Fallback do statycznych
         setTranslations(staticTranslations);
       } finally {
+        console.log('🏁 [LanguageContext] Translation loading complete');
         setIsLoading(false);
       }
     };

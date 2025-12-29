@@ -10,7 +10,15 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, isLoading } = useLanguage();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-2xl">Ładowanie...</div>
+      </div>
+    );
+  }
 
   return (
     <>
