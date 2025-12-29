@@ -14,7 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_super_admin: boolean | null
+          last_login: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          is_super_admin?: boolean | null
+          last_login?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_super_admin?: boolean | null
+          last_login?: string | null
+        }
+        Relationships: []
+      }
+      page_contents: {
+        Row: {
+          content_de: Json | null
+          content_en: Json | null
+          content_pl: Json | null
+          created_at: string | null
+          id: string
+          is_published: boolean | null
+          page_slug: string
+          subtitle_de: string | null
+          subtitle_en: string | null
+          subtitle_pl: string | null
+          title_de: string | null
+          title_en: string | null
+          title_pl: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content_de?: Json | null
+          content_en?: Json | null
+          content_pl?: Json | null
+          created_at?: string | null
+          id?: string
+          is_published?: boolean | null
+          page_slug: string
+          subtitle_de?: string | null
+          subtitle_en?: string | null
+          subtitle_pl?: string | null
+          title_de?: string | null
+          title_en?: string | null
+          title_pl?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content_de?: Json | null
+          content_en?: Json | null
+          content_pl?: Json | null
+          created_at?: string | null
+          id?: string
+          is_published?: boolean | null
+          page_slug?: string
+          subtitle_de?: string | null
+          subtitle_en?: string | null
+          subtitle_pl?: string | null
+          title_de?: string | null
+          title_en?: string | null
+          title_pl?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      translations: {
+        Row: {
+          array_index: number | null
+          category: string
+          created_at: string | null
+          id: string
+          is_array: boolean | null
+          key: string
+          parent_key: string | null
+          subcategory: string | null
+          updated_at: string | null
+          value_de: string | null
+          value_en: string | null
+          value_pl: string | null
+        }
+        Insert: {
+          array_index?: number | null
+          category: string
+          created_at?: string | null
+          id?: string
+          is_array?: boolean | null
+          key: string
+          parent_key?: string | null
+          subcategory?: string | null
+          updated_at?: string | null
+          value_de?: string | null
+          value_en?: string | null
+          value_pl?: string | null
+        }
+        Update: {
+          array_index?: number | null
+          category?: string
+          created_at?: string | null
+          id?: string
+          is_array?: boolean | null
+          key?: string
+          parent_key?: string | null
+          subcategory?: string | null
+          updated_at?: string | null
+          value_de?: string | null
+          value_en?: string | null
+          value_pl?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
