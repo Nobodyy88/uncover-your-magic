@@ -1,7 +1,7 @@
 # 🚧 Praca w toku - Panel administracyjny WM Tyres
 
 **Data aktualizacji:** 2025-12-29
-**Status:** ✅ Strona działa! | 🔄 Panel do przeprojektowania (Wariant A)
+**Status:** ✅ Strona działa! | ✅ Panel przeprojektowany (Wariant A)
 
 ---
 
@@ -67,11 +67,42 @@ location.reload();
 
 ---
 
-## 🔄 PRIORYTET 2: Przeprojektowanie panelu admina (Wariant A)
+## ✅ PRIORYTET 2: UKOŃCZONO - Przeprojektowanie panelu admina (Wariant A)
 
-**Status:** DO ZROBIENIA
+**Status:** ✅ UKOŃCZONE (2025-12-29)
 
-### Aktualna struktura panelu:
+### Co zostało zrobione:
+
+1. **Utworzono `src/lib/pageStructure.ts`**
+   - Mapowanie wszystkich stron (Index, O nas, Opony, etc.) do kluczy tłumaczeń
+   - Definicja sekcji dla każdej strony
+   - Funkcje pomocnicze: `getAllPages()`, `getPageById()`, `getPageTranslationKeys()`
+
+2. **Przeprojektowano `src/pages/admin/Dashboard.tsx`**
+   - Grid z przyciskami dla każdej STRONY (nie kategorii)
+   - Przycisk "Eksportuj do plików" - generuje pl.ts, en.ts, de.ts
+   - Przycisk "Wyczyść cache" - czyści localStorage
+   - Przycisk "Podgląd" przy każdej stronie
+
+3. **Przepisano `src/pages/admin/PageEditor.tsx`**
+   - Prosty edytor z Input/Textarea (automatyczny wybór na podstawie długości)
+   - Tabs dla języków (PL/EN/DE)
+   - Pola pogrupowane po sekcjach
+   - Batch update wszystkich zmian jednocześnie
+   - Przyciski: Zapisz, Podgląd, Wyczyść cache
+
+4. **Zaktualizowano routing w `src/App.tsx`**
+   - Zmieniono z `/admin/pages/:slug` na `/admin/page/:pageId`
+   - Usunięto routing dla TranslationsList i TranslationEditor
+
+5. **Usunięto stare komponenty:**
+   - `src/pages/admin/TranslationsList.tsx`
+   - `src/pages/admin/TranslationEditor.tsx`
+   - `src/pages/admin/PagesList.tsx`
+   - `src/components/admin/TranslationField.tsx`
+   - `src/components/admin/ArrayEditor.tsx`
+
+### Struktura przed zmianą:
 
 ```
 Dashboard
@@ -80,7 +111,7 @@ Dashboard
 └─ Ustawienia (placeholder)
 ```
 
-### Docelowa struktura (Wariant A):
+### Struktura po zmianie (Wariant A):
 
 ```
 Dashboard
@@ -119,70 +150,33 @@ Dashboard
 - WYSIWYG editor (nie potrzebny)
 - Podgląd na żywo (nie potrzebny)
 
-**🎯 Cel:**
-- 90% przypadków: szybkie zmiany tekstów (cena, opis, poprawka literówki)
-- 10% przypadków: zmiany struktury/layoutu przez Claude Code
+**🎯 Cel (osiągnięty):**
+- ✅ 90% przypadków: szybkie zmiany tekstów (cena, opis, poprawka literówki)
+- ✅ 10% przypadków: zmiany struktury/layoutu przez Claude Code
 
-### Plan implementacji Wariantu A:
+### Pliki zmodyfikowane:
+- ✅ `src/lib/pageStructure.ts` (nowy)
+- ✅ `src/pages/admin/Dashboard.tsx` (przeprojektowany)
+- ✅ `src/pages/admin/PageEditor.tsx` (przepisany)
+- ✅ `src/App.tsx` (zaktualizowany routing)
 
-#### Faza 1: Mapowanie struktury stron
-1. Stworzyć plik `src/lib/pageStructure.ts` z mapowaniem:
-   ```typescript
-   const pageStructure = {
-     'index': {
-       sections: [
-         { name: 'Hero', keys: ['hero.headline1', 'hero.headline2', ...] },
-         { name: 'Services', keys: ['services.title', 'services.titleHighlight', ...] },
-         // ...
-       ]
-     },
-     'about': { ... },
-     // ...
-   }
-   ```
+### Pliki usunięte:
+- ✅ `src/pages/admin/TranslationsList.tsx`
+- ✅ `src/pages/admin/TranslationEditor.tsx`
+- ✅ `src/pages/admin/PagesList.tsx`
+- ✅ `src/components/admin/TranslationField.tsx`
+- ✅ `src/components/admin/ArrayEditor.tsx`
 
-#### Faza 2: Przeprojektowanie Dashboard
-- **Plik:** `src/pages/admin/Dashboard.tsx`
-- Usuń karty "Tłumaczenia" i "Podstrony"
-- Dodaj grid z przyciskami dla każdej strony:
-  - Index (Strona główna)
-  - O nas, Sieć partnerów
-  - Opony, Felgi, Regeneracja, Ride On
-  - Naprawy, Umowa serwisowa, Montaż
-- Dodaj przycisk "Eksportuj do plików"
-- Dodaj przycisk "Wyczyść cache"
+### Jak korzystać z nowego panelu:
 
-#### Faza 3: Nowy edytor strony
-- **Plik:** `src/pages/admin/PageEditor.tsx` (przepisać od nowa)
-- Tabs dla języków (PL/EN/DE)
-- Pogrupowane pola po sekcjach
-- Input dla krótkich tekstów, Textarea dla długich
-- Automatyczne wykrywanie typu pola na podstawie długości
-- Batch update wszystkich zmian
-
-#### Faza 4: Funkcja eksportu
-- Pobierz wszystkie tłumaczenia z Supabase
-- Zbuduj obiekty pl/en/de używając `buildTranslationsObject()`
-- Wygeneruj pliki TypeScript (.ts)
-- Download jako 3 pliki: `pl.ts`, `en.ts`, `de.ts`
-- Instrukcja dla użytkownika: "Skopiuj te pliki do src/locales/"
-
-#### Faza 5: Usunięcie starych plików
-- Usuń `TranslationsList.tsx`, `TranslationEditor.tsx`
-- Usuń `PagesList.tsx`, stary `PageEditor.tsx`
-- Usuń `TranslationField.tsx`, `ArrayEditor.tsx`
-- Zaktualizuj routing w `App.tsx`
-
-### Pliki do zmiany:
-- ✏️ `src/lib/pageStructure.ts` (nowy)
-- ✏️ `src/pages/admin/Dashboard.tsx` (przeprojektowanie)
-- ✏️ `src/pages/admin/PageEditor.tsx` (przepisać)
-- 🗑️ `src/pages/admin/TranslationsList.tsx` (usunąć)
-- 🗑️ `src/pages/admin/TranslationEditor.tsx` (usunąć)
-- 🗑️ `src/pages/admin/PagesList.tsx` (usunąć)
-- 🗑️ `src/components/admin/TranslationField.tsx` (usunąć)
-- 🗑️ `src/components/admin/ArrayEditor.tsx` (usunąć)
-- ✏️ `src/App.tsx` (zaktualizować routing)
+1. **Zaloguj się:** `/admin/login` (djdrax@gmail.com)
+2. **Dashboard:** `/admin/dashboard` - wybierz stronę do edycji
+3. **Edycja:** Kliknij "Edytuj" przy wybranej stronie
+4. **Tabs językowe:** Przełączaj między PL/EN/DE
+5. **Zapisz:** Wszystkie zmiany zapisują się jednocześnie
+6. **Podgląd:** Otwórz stronę w nowej karcie
+7. **Wyczyść cache:** Po zapisaniu, aby zobaczyć zmiany
+8. **Eksport:** Pobierz pliki .ts do synchronizacji z kodem
 
 ---
 
@@ -249,22 +243,22 @@ Przetestuj panel admina:
 - Cache localStorage (1 godzina)
 - RLS policies (is_admin() function)
 
-**🔄 Do zrobienia:**
-- Przeprojektowanie panelu na Wariant A (prostsze UI)
-- Funkcja eksportu do plików
-- Przycisk "Wyczyść cache"
-- Usunięcie starych komponentów panelu
+**✅ Zrobione niedawno:**
+- ✅ Przeprojektowanie panelu na Wariant A (prostsze UI)
+- ✅ Funkcja eksportu do plików
+- ✅ Przycisk "Wyczyść cache"
+- ✅ Usunięcie starych komponentów panelu
 
 ---
 
 ## 💾 Ostatnie commity
 
 ```
-(następny) - Napraw awarię strony głównej i przywróć Supabase
+22b34b0 - Przeprojektuj panel administracyjny według Wariantu A (2025-12-29)
+4df722e - Napraw krytyczną awarię strony głównej i przywróć Supabase
 bd305eb - Pilna naprawa: przywróć działanie strony głównej (NIE DZIAŁAŁO)
 5d8a55b - Dodaj szczegółowe logowanie debugowania
 fecc471 - Dodaj pełny panel administracyjny dla WM Tyres
-aadd817 - Popraw używanie tłumaczeń i nawigację
 ```
 
 ---
