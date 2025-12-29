@@ -23,9 +23,6 @@ import Mounting from "./pages/service/Mounting";
 // Admin
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
-import TranslationsList from "./pages/admin/TranslationsList";
-import TranslationEditor from "./pages/admin/TranslationEditor";
-import PagesList from "./pages/admin/PagesList";
 import PageEditor from "./pages/admin/PageEditor";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 
@@ -65,31 +62,7 @@ const App = () => (
               }
             />
             <Route
-              path="/admin/translations"
-              element={
-                <ProtectedRoute>
-                  <TranslationsList />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/translations/:category"
-              element={
-                <ProtectedRoute>
-                  <TranslationEditor />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/pages"
-              element={
-                <ProtectedRoute>
-                  <PagesList />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/pages/:slug"
+              path="/admin/page/:pageId"
               element={
                 <ProtectedRoute>
                   <PageEditor />

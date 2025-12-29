@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,151 +9,115 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LogOut, Save, ArrowLeft, Eye } from 'lucide-react';
+import { LogOut, Save, ArrowLeft, Eye, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import type { Tables } from '@/integrations/supabase/types';
+import { getPageById } from '@/lib/pageStructure';
+import type { Database } from '@/integrations/supabase/types';
 
-type PageContent = Tables<'page_contents'>;
+type TranslationRecord = Database['public']['Tables']['translations']['Row'];
 
 /**
- * Edytor treści podstron
+ * Edytor tekstów strony - Wariant A
  *
- * Umożliwia edycję tytułu, podtytułu i treści w trzech językach oraz publikację
+ * Prosty edytor z Input/Textarea pogrupowany po sekcjach
+ * Tabs dla języków (PL/EN/DE)
+ * Batch update wszystkich zmian
  */
 const PageEditor = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { pageId } = useParams<{ pageId: string }>();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'pl' | 'en' | 'de'>('pl');
 
-  // Stan formularza
-  const [formData, setFormData] = useState<Partial<PageContent>>({
-    title_pl: '',
-    title_en: '',
-    title_de: '',
-    subtitle_pl: '',
-    subtitle_en: '',
-    subtitle_de: '',
-    content_pl: null,
-    content_en: null,
-    content_de: null,
-    is_published: false,
-  });
+  const pageConfig = pageId ? getPageById(pageId) : null;
+
+  // Stan formularza - struktura: { key: { pl: '', en: '', de: '' } }
+  const [formData, setFormData] = useState<Record<string, { pl: string; en: string; de: string }>>({});
 
   const handleSignOut = async () => {
     await signOut();
   };
 
-  // Mapowanie slugów na nazwy
-  const pageNames: Record<string, string> = {
-    rims: 'Felgi',
-    regeneration: 'Regeneracja',
-    repairs: 'Naprawy',
-    mounting: 'Montaż',
-  };
-
-  const pageName = slug ? pageNames[slug] || slug : '';
-
-  // Pobierz treść podstrony
-  const { data: pageContent, isLoading, error } = useQuery({
-    queryKey: ['page-content', slug],
+  // Pobierz tłumaczenia dla tej strony
+  const { data: translations, isLoading, error } = useQuery({
+    queryKey: ['page-translations', pageId],
     queryFn: async () => {
-      if (!slug) throw new Error('Brak slug');
+      if (!pageConfig) throw new Error('Nieprawidłowe ID strony');
+
+      const keys = pageConfig.sections.flatMap(section => section.keys);
 
       const { data, error } = await supabase
-        .from('page_contents')
+        .from('translations')
         .select('*')
-        .eq('page_slug', slug)
-        .maybeSingle();
+        .in('key', keys)
+        .order('key');
 
       if (error) throw error;
 
-      // Jeśli strona nie istnieje, zwróć null (zostanie utworzona przy zapisie)
-      return data;
+      return data as TranslationRecord[];
     },
-    enabled: !!slug,
+    enabled: !!pageConfig,
   });
 
   // Zaktualizuj formularz gdy dane się załadują
   useEffect(() => {
-    if (pageContent) {
-      setFormData({
-        title_pl: pageContent.title_pl || '',
-        title_en: pageContent.title_en || '',
-        title_de: pageContent.title_de || '',
-        subtitle_pl: pageContent.subtitle_pl || '',
-        subtitle_en: pageContent.subtitle_en || '',
-        subtitle_de: pageContent.subtitle_de || '',
-        content_pl: pageContent.content_pl,
-        content_en: pageContent.content_en,
-        content_de: pageContent.content_de,
-        is_published: pageContent.is_published || false,
+    if (translations && translations.length > 0) {
+      const formDataMap: Record<string, { pl: string; en: string; de: string }> = {};
+
+      translations.forEach((record) => {
+        formDataMap[record.key] = {
+          pl: record.value_pl || '',
+          en: record.value_en || '',
+          de: record.value_de || '',
+        };
       });
+
+      setFormData(formDataMap);
+    } else if (pageConfig) {
+      // Jeśli brak danych, zainicjuj puste pola
+      const formDataMap: Record<string, { pl: string; en: string; de: string }> = {};
+      const keys = pageConfig.sections.flatMap(section => section.keys);
+      keys.forEach(key => {
+        formDataMap[key] = { pl: '', en: '', de: '' };
+      });
+      setFormData(formDataMap);
     }
-  }, [pageContent]);
+  }, [translations, pageConfig]);
 
   // Mutation do zapisu
   const saveMutation = useMutation({
-    mutationFn: async (data: Partial<PageContent>) => {
-      if (!slug) throw new Error('Brak slug');
+    mutationFn: async (data: Record<string, { pl: string; en: string; de: string }>) => {
+      if (!pageConfig) throw new Error('Nieprawidłowe ID strony');
 
-      // Walidacja JSON dla content
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const validateJSON = (value: any, lang: string) => {
-        if (!value) return null;
-        if (typeof value === 'string') {
-          try {
-            return JSON.parse(value);
-          } catch {
-            throw new Error(`Nieprawidłowy JSON dla content_${lang}`);
-          }
-        }
-        return value;
-      };
-
-      const contentData = {
-        page_slug: slug,
-        title_pl: data.title_pl || null,
-        title_en: data.title_en || null,
-        title_de: data.title_de || null,
-        subtitle_pl: data.subtitle_pl || null,
-        subtitle_en: data.subtitle_en || null,
-        subtitle_de: data.subtitle_de || null,
-        content_pl: validateJSON(data.content_pl, 'pl'),
-        content_en: validateJSON(data.content_en, 'en'),
-        content_de: validateJSON(data.content_de, 'de'),
-        is_published: data.is_published || false,
+      // Batch update wszystkich tłumaczeń
+      const updates = Object.entries(data).map(([key, values]) => ({
+        key,
+        category: key.split('.')[0], // pierwsza część klucza jako kategoria
+        value_pl: values.pl || null,
+        value_en: values.en || null,
+        value_de: values.de || null,
         updated_at: new Date().toISOString(),
-      };
+      }));
 
-      if (pageContent) {
-        // Update istniejącego
-        const { error } = await supabase
-          .from('page_contents')
-          .update(contentData)
-          .eq('id', pageContent.id);
+      // Upsert wszystkich rekordów
+      const { error } = await supabase
+        .from('translations')
+        .upsert(updates, {
+          onConflict: 'key',
+          ignoreDuplicates: false,
+        });
 
-        if (error) throw error;
-      } else {
-        // Insert nowego
-        const { error } = await supabase
-          .from('page_contents')
-          .insert(contentData);
-
-        if (error) throw error;
-      }
+      if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['page-content', slug] });
-      queryClient.invalidateQueries({ queryKey: ['page-contents-list'] });
+      queryClient.invalidateQueries({ queryKey: ['page-translations', pageId] });
       toast({
         title: 'Zapisano',
-        description: 'Treść strony została zaktualizowana',
+        description: 'Wszystkie zmiany zostały zapisane w bazie danych',
       });
     },
     onError: (error: Error) => {
@@ -170,23 +134,81 @@ const PageEditor = () => {
   };
 
   const handlePreview = () => {
-    // Mapowanie slugów na URL-e
-    const urlMap: Record<string, string> = {
-      rims: '/produkty/felgi',
-      regeneration: '/produkty/regeneracja',
-      repairs: '/serwis/naprawy',
-      mounting: '/serwis/montaz',
-    };
-
-    const url = slug ? urlMap[slug] : null;
-    if (url) {
-      window.open(`#${url}`, '_blank');
+    if (pageConfig) {
+      window.open(`#${pageConfig.previewUrl}`, '_blank');
     }
   };
 
-  const updateField = (field: keyof PageContent, value: string | boolean | null) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleClearCache = () => {
+    try {
+      localStorage.removeItem('translations_cache_pl');
+      localStorage.removeItem('translations_cache_en');
+      localStorage.removeItem('translations_cache_de');
+
+      toast({
+        title: 'Cache wyczyszczony!',
+        description: 'Odśwież stronę podglądu (F5) aby zobaczyć zmiany.',
+      });
+    } catch (error) {
+      console.error('Clear cache error:', error);
+      toast({
+        title: 'Błąd',
+        description: 'Nie udało się wyczyścić cache.',
+        variant: 'destructive',
+      });
+    }
   };
+
+  const updateField = (key: string, lang: 'pl' | 'en' | 'de', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [lang]: value,
+      },
+    }));
+  };
+
+  // Funkcja do formatowania nazwy klucza
+  const formatKeyLabel = (key: string): string => {
+    // Usuń prefix do ostatniej kropki lub nawiasu kwadratowego
+    const parts = key.split(/[.[\]]/);
+    const lastPart = parts[parts.length - 1];
+
+    // Kapitalizuj i zamień podkreślenia na spacje
+    return lastPart
+      .replace(/_/g, ' ')
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
+  };
+
+  // Określ czy pole powinno być Textarea
+  const shouldUseTextarea = (key: string, value: string): boolean => {
+    // Użyj textarea dla:
+    // - kluczy zawierających 'description', 'content', 'message', 'paragraph'
+    // - wartości dłuższych niż 100 znaków
+    // - wartości wieloliniowych
+    const keyLower = key.toLowerCase();
+    const isLongField = keyLower.includes('description') ||
+                       keyLower.includes('content') ||
+                       keyLower.includes('message') ||
+                       keyLower.includes('paragraph');
+
+    return isLongField || value.length > 100 || value.includes('\n');
+  };
+
+  if (!pageConfig) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertDescription>
+            Nieprawidłowe ID strony. Wróć do dashboardu.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -197,27 +219,36 @@ const PageEditor = () => {
             <h1 className="font-display text-2xl">Panel Administracyjny</h1>
             <p className="text-sm text-muted-foreground">WM Tyres</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Button
               variant="outline"
               onClick={handlePreview}
+              size="sm"
             >
               <Eye className="w-4 h-4 mr-2" />
               Podgląd
             </Button>
             <Button
+              variant="outline"
+              onClick={handleClearCache}
+              size="sm"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Wyczyść cache
+            </Button>
+            <Button
               onClick={handleSave}
               disabled={saveMutation.isPending}
-              size="lg"
+              size="sm"
             >
               <Save className="w-4 h-4 mr-2" />
               {saveMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
             </Button>
-            <div className="text-right">
+            <div className="text-right ml-4">
               <p className="text-sm font-medium">{user?.email}</p>
               <p className="text-xs text-muted-foreground">Administrator</p>
             </div>
-            <Button variant="outline" onClick={handleSignOut}>
+            <Button variant="outline" onClick={handleSignOut} size="sm">
               <LogOut className="w-4 h-4 mr-2" />
               Wyloguj
             </Button>
@@ -229,38 +260,17 @@ const PageEditor = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumbs */}
         <div className="mb-6">
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link to="/admin/dashboard" className="hover:text-foreground">Dashboard</Link>
-            <span>/</span>
-            <Link to="/admin/pages" className="hover:text-foreground">Podstrony</Link>
-            <span>/</span>
-            <span className="text-foreground">{pageName}</span>
-          </nav>
+          <Button variant="ghost" onClick={() => navigate('/admin/dashboard')}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Powrót do dashboardu
+          </Button>
         </div>
 
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate('/admin/pages')}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Powrót
-            </Button>
-            <div>
-              <h2 className="font-display text-3xl">{pageName}</h2>
-              <p className="text-muted-foreground">
-                Edytuj treść podstrony w trzech językach
-              </p>
-            </div>
-          </div>
-
-          {/* Publikacja */}
-          <div className="flex items-center gap-3">
-            <Label htmlFor="publish">Opublikowana</Label>
-            <Switch
-              id="publish"
-              checked={formData.is_published || false}
-              onCheckedChange={(checked) => updateField('is_published', checked)}
-            />
-          </div>
+        <div className="mb-8">
+          <h2 className="font-display text-3xl mb-2">{pageConfig.title}</h2>
+          <p className="text-muted-foreground">
+            Edytuj teksty w trzech językach (PL/EN/DE)
+          </p>
         </div>
 
         {/* Error State */}
@@ -279,7 +289,7 @@ const PageEditor = () => {
               <Skeleton className="h-8 w-64" />
             </CardHeader>
             <CardContent className="space-y-4">
-              {[...Array(3)].map((_, i) => (
+              {[...Array(5)].map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />
               ))}
             </CardContent>
@@ -290,9 +300,9 @@ const PageEditor = () => {
         {!isLoading && !error && (
           <Card>
             <CardHeader>
-              <CardTitle>Edycja treści</CardTitle>
+              <CardTitle>Edycja tekstów</CardTitle>
               <CardDescription>
-                Wypełnij pola dla każdego języka. Pole "Treść" akceptuje JSON z sekcjami strony.
+                Wybierz język i edytuj pola. Kliknij "Zapisz" aby zatwierdzić wszystkie zmiany.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -304,53 +314,52 @@ const PageEditor = () => {
                 </TabsList>
 
                 {(['pl', 'en', 'de'] as const).map(lang => (
-                  <TabsContent key={lang} value={lang} className="space-y-6">
-                    {/* Tytuł */}
-                    <div className="space-y-2">
-                      <Label htmlFor={`title-${lang}`}>Tytuł</Label>
-                      <Input
-                        id={`title-${lang}`}
-                        value={formData[`title_${lang}`] || ''}
-                        onChange={(e) => updateField(`title_${lang}`, e.target.value)}
-                        placeholder="Wprowadź tytuł strony..."
-                        disabled={saveMutation.isPending}
-                      />
-                    </div>
+                  <TabsContent key={lang} value={lang}>
+                    {pageConfig.sections.map((section) => (
+                      <div key={section.name} className="mb-8">
+                        {/* Sekcja Header */}
+                        <div className="mb-4 pb-2 border-b">
+                          <h3 className="font-display text-xl text-primary">{section.name}</h3>
+                        </div>
 
-                    {/* Podtytuł */}
-                    <div className="space-y-2">
-                      <Label htmlFor={`subtitle-${lang}`}>Podtytuł</Label>
-                      <Input
-                        id={`subtitle-${lang}`}
-                        value={formData[`subtitle_${lang}`] || ''}
-                        onChange={(e) => updateField(`subtitle_${lang}`, e.target.value)}
-                        placeholder="Wprowadź podtytuł..."
-                        disabled={saveMutation.isPending}
-                      />
-                    </div>
+                        {/* Pola sekcji */}
+                        <div className="space-y-4">
+                          {section.keys.map((key) => {
+                            const value = formData[key]?.[lang] || '';
+                            const useTextarea = shouldUseTextarea(key, value);
+                            const label = formatKeyLabel(key);
 
-                    {/* Treść (JSON) */}
-                    <div className="space-y-2">
-                      <Label htmlFor={`content-${lang}`}>Treść (JSON)</Label>
-                      <Textarea
-                        id={`content-${lang}`}
-                        value={
-                          formData[`content_${lang}`]
-                            ? typeof formData[`content_${lang}`] === 'string'
-                              ? formData[`content_${lang}`] as string
-                              : JSON.stringify(formData[`content_${lang}`], null, 2)
-                            : ''
-                        }
-                        onChange={(e) => updateField(`content_${lang}`, e.target.value)}
-                        placeholder={`{\n  "sections": [\n    {\n      "type": "hero",\n      "title": "Tytuł sekcji",\n      "description": "Opis..."\n    }\n  ]\n}`}
-                        disabled={saveMutation.isPending}
-                        rows={15}
-                        className="font-mono text-sm"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Wprowadź strukturę JSON z sekcjami strony. Format: {`{"sections": [...]}`}
-                      </p>
-                    </div>
+                            return (
+                              <div key={key} className="space-y-2">
+                                <Label htmlFor={`${key}-${lang}`} className="text-sm font-medium">
+                                  {label}
+                                  <span className="text-xs text-muted-foreground ml-2">({key})</span>
+                                </Label>
+                                {useTextarea ? (
+                                  <Textarea
+                                    id={`${key}-${lang}`}
+                                    value={value}
+                                    onChange={(e) => updateField(key, lang, e.target.value)}
+                                    placeholder={`Wprowadź ${label.toLowerCase()}...`}
+                                    disabled={saveMutation.isPending}
+                                    rows={4}
+                                    className="text-sm"
+                                  />
+                                ) : (
+                                  <Input
+                                    id={`${key}-${lang}`}
+                                    value={value}
+                                    onChange={(e) => updateField(key, lang, e.target.value)}
+                                    placeholder={`Wprowadź ${label.toLowerCase()}...`}
+                                    disabled={saveMutation.isPending}
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
                   </TabsContent>
                 ))}
               </Tabs>
@@ -358,38 +367,21 @@ const PageEditor = () => {
           </Card>
         )}
 
-        {/* Pomoc */}
+        {/* Info Box */}
         <Card className="mt-6 bg-muted/50">
           <CardHeader>
-            <CardTitle className="text-base">Pomoc - struktura JSON</CardTitle>
+            <CardTitle className="text-base">Wskazówki</CardTitle>
           </CardHeader>
           <CardContent className="text-sm space-y-2">
-            <p>Przykładowa struktura treści:</p>
-            <pre className="bg-background p-4 rounded-lg overflow-x-auto">
-{`{
-  "sections": [
-    {
-      "type": "hero",
-      "title": "Tytuł sekcji hero",
-      "description": "Opis sekcji",
-      "image": "/images/hero.jpg"
-    },
-    {
-      "type": "features",
-      "items": [
-        {
-          "title": "Cecha 1",
-          "description": "Opis cechy"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "content": "<p>Długi tekst...</p>"
-    }
-  ]
-}`}
-            </pre>
+            <p>
+              <strong>Zapisz:</strong> Zapisuje wszystkie zmiany we wszystkich językach jednocześnie.
+            </p>
+            <p>
+              <strong>Podgląd:</strong> Otwiera stronę w nowej karcie. Aby zobaczyć zmiany, zapisz i wyczyść cache.
+            </p>
+            <p>
+              <strong>Wyczyść cache:</strong> Usuwa cache tłumaczeń. Użyj po zapisaniu, aby zobaczyć zmiany na stronie.
+            </p>
           </CardContent>
         </Card>
       </main>
