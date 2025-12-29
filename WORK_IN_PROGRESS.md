@@ -1,235 +1,208 @@
-# 🚧 Praca w toku - Panel administracyjny WM Tyres
+# 🚧 Panel administracyjny WM Tyres - Dokumentacja
 
 **Data aktualizacji:** 2025-12-29
-**Status:** ✅ Strona działa! | ✅ Panel przeprojektowany (Wariant A)
+**Status:** ✅ Gotowy do użycia
 
 ---
 
-## ✅ PRIORYTET 1: NAPRAWIONO - Awaria strony głównej
+## 📋 Jak działa panel administracyjny
 
-### Problem:
-- Strona główna pojawiała się przez **pół sekundy**, potem **znikała** (biały ekran)
-- Błąd: `TypeError: e.services.items.map is not a function`
-- Przyczyna: Funkcja `buildTranslationsObject()` źle odbudowywała tablice obiektów z bazy danych
+### Struktura panelu (Wariant A)
 
-### Rozwiązanie (✅ UKOŃCZONE):
+Panel umożliwia edycję tekstów dla 10 stron:
+- Index (Strona główna) - 7 sekcji
+- O nas - 2 sekcje
+- Sieć partnerów - 2 sekcje
+- Opony, Felgi, Regeneracja, Ride On - po 1 sekcji
+- Naprawy, Umowa serwisowa, Montaż - po 1 sekcji
 
-#### 1. Znalezienie problemu
-- **Error Boundary** w Index.tsx złapał błąd: `services.items.map is not a function`
-- Okazało się że `t.services.items` nie był tablicą, tylko obiektem
-- Problem był w funkcji `buildTranslationsObject()` w `src/lib/translations.ts`
+**Funkcje:**
+- ✅ Edycja tekstów w 3 językach (PL/EN/DE)
+- ✅ Przycisk "Eksportuj do plików" - pobiera pl.ts, en.ts, de.ts
+- ✅ Przycisk "Wyczyść cache" - czyści localStorage
+- ✅ Przycisk "Podgląd" - otwiera stronę w nowej karcie
+- ✅ Instrukcje obsługi wbudowane w interfejs
 
-#### 2. Naprawa skryptu migracji
-- **Plik:** `scripts/migrate-translations.ts`
-- **Problem:** Tablice obiektów były źle spłaszczane do bazy danych
-- **Rozwiązanie:** Zmieniono format kluczy z `services.items.title` na `services.items[0].title`
-- **Efekt:** Migracja utworzyła 212 rekordów (zamiast 157)
-
-#### 3. Naprawa funkcji buildTranslationsObject
-- **Plik:** `src/lib/translations.ts`
-- **Problem:** Funkcja nie obsługiwała kluczy z nawiasami kwadratowymi typu `items[0].title`
-- **Rozwiązanie:** Przepisano funkcję `setValue()` z parserem dla kluczy z `[index]`
-- **Efekt:** Tablice obiektów są teraz poprawnie odbudowywane
-
-#### 4. Ponowna migracja danych
-```bash
-# Usunięto stare dane (157 rekordów)
-# Uruchomiono migrację ze zaktualizowanym skryptem
-npm run migrate:translations
-# ✅ Wstawiono 212 rekordów poprawnie
-```
-
-#### 5. Przywrócenie integracji z Supabase
-- Odkomentowano import Supabase w `LanguageContext.tsx`
-- Strona działa z tłumaczeniami z bazy danych
-- Cache localStorage działa poprawnie (1 godzina)
-
-### Pliki zmienione:
-- ✅ `scripts/migrate-translations.ts` - naprawa spłaszczania tablic
-- ✅ `src/lib/translations.ts` - naprawa buildTranslationsObject()
-- ✅ `src/contexts/LanguageContext.tsx` - przywrócenie Supabase
-- ✅ `src/components/ErrorBoundary.tsx` - nowy komponent do debugowania
-- ✅ `src/pages/Index.tsx` - dodano Error Boundary wrapper
-
-### Status:
-✅ **STRONA DZIAŁA!** - Przetestowano na przeglądarce użytkownika
-✅ **Panel admina działa** - logowanie, dashboard, edycja tłumaczeń
-✅ **Integracja z Supabase działa** - 212 rekordów w bazie, cache 1h
-
-### Uwaga dla nowych użytkowników:
-Jeśli ktoś miał starą wersję strony w cache localStorage, może mieć zepsuty cache.
-**Rozwiązanie:** Cache sam się wyczyści po 1 godzinie, lub można ręcznie wyczyścić:
-```javascript
-// W konsoli przeglądarki (F12)
-localStorage.clear();
-location.reload();
-```
-
----
-
-## ✅ PRIORYTET 2: UKOŃCZONO - Przeprojektowanie panelu admina (Wariant A)
-
-**Status:** ✅ UKOŃCZONE (2025-12-29)
-
-### Co zostało zrobione:
-
-1. **Utworzono `src/lib/pageStructure.ts`**
-   - Mapowanie wszystkich stron (Index, O nas, Opony, etc.) do kluczy tłumaczeń
-   - Definicja sekcji dla każdej strony
-   - Funkcje pomocnicze: `getAllPages()`, `getPageById()`, `getPageTranslationKeys()`
-
-2. **Przeprojektowano `src/pages/admin/Dashboard.tsx`**
-   - Grid z przyciskami dla każdej STRONY (nie kategorii)
-   - Przycisk "Eksportuj do plików" - generuje pl.ts, en.ts, de.ts
-   - Przycisk "Wyczyść cache" - czyści localStorage
-   - Przycisk "Podgląd" przy każdej stronie
-
-3. **Przepisano `src/pages/admin/PageEditor.tsx`**
-   - Prosty edytor z Input/Textarea (automatyczny wybór na podstawie długości)
-   - Tabs dla języków (PL/EN/DE)
-   - Pola pogrupowane po sekcjach
-   - Batch update wszystkich zmian jednocześnie
-   - Przyciski: Zapisz, Podgląd, Wyczyść cache
-
-4. **Zaktualizowano routing w `src/App.tsx`**
-   - Zmieniono z `/admin/pages/:slug` na `/admin/page/:pageId`
-   - Usunięto routing dla TranslationsList i TranslationEditor
-
-5. **Usunięto stare komponenty:**
-   - `src/pages/admin/TranslationsList.tsx`
-   - `src/pages/admin/TranslationEditor.tsx`
-   - `src/pages/admin/PagesList.tsx`
-   - `src/components/admin/TranslationField.tsx`
-   - `src/components/admin/ArrayEditor.tsx`
-
-### Struktura przed zmianą:
-
-```
-Dashboard
-├─ Tłumaczenia → Lista kategorii → Edytor kategorii
-├─ Podstrony → Lista podstron → Edytor podstrony
-└─ Ustawienia (placeholder)
-```
-
-### Struktura po zmianie (Wariant A):
-
-```
-Dashboard
-├─ Index (strona główna)
-│  ├─ Sekcja: Hero
-│  ├─ Sekcja: Services
-│  ├─ Sekcja: About
-│  ├─ Sekcja: Realizations
-│  └─ Sekcja: Contact
-├─ O nas
-├─ Sieć partnerów
-├─ Opony
-├─ Felgi
-├─ Regeneracja
-├─ Ride On
-├─ Naprawy
-├─ Umowa serwisowa
-├─ Montaż
-└─ [Eksportuj do plików] (przycisk)
-```
-
-### Wymagania Wariantu A:
-
-**✅ Co BĘDZIE:**
-- Przyciski dla każdej **STRONY** (Index, O nas, Opony, etc.)
-- Edycja **tylko tekstów** w 3 językach (PL/EN/DE)
-- Prosty interfejs - Input/Textarea (BEZ JSON)
-- Przycisk **"Eksportuj do plików"** - synchronizacja z Claude Code
-- Przycisk **"Podgląd"** - otwiera stronę w nowej karcie
-- Przycisk **"Wyczyść cache"** - czyści localStorage
-
-**❌ Co NIE BĘDZIE:**
-- Zakładka "Podstrony" (usunięta)
-- Edytor JSON (usunięty)
-- Upload obrazków (usunięty)
-- WYSIWYG editor (nie potrzebny)
-- Podgląd na żywo (nie potrzebny)
-
-**🎯 Cel (osiągnięty):**
-- ✅ 90% przypadków: szybkie zmiany tekstów (cena, opis, poprawka literówki)
-- ✅ 10% przypadków: zmiany struktury/layoutu przez Claude Code
-
-### Pliki zmodyfikowane:
-- ✅ `src/lib/pageStructure.ts` (nowy)
-- ✅ `src/pages/admin/Dashboard.tsx` (przeprojektowany)
-- ✅ `src/pages/admin/PageEditor.tsx` (przepisany)
-- ✅ `src/App.tsx` (zaktualizowany routing)
-
-### Pliki usunięte:
-- ✅ `src/pages/admin/TranslationsList.tsx`
-- ✅ `src/pages/admin/TranslationEditor.tsx`
-- ✅ `src/pages/admin/PagesList.tsx`
-- ✅ `src/components/admin/TranslationField.tsx`
-- ✅ `src/components/admin/ArrayEditor.tsx`
-
-### Jak korzystać z nowego panelu:
+### Jak korzystać
 
 1. **Zaloguj się:** `/admin/login` (djdrax@gmail.com)
-2. **Dashboard:** `/admin/dashboard` - wybierz stronę do edycji
-3. **Edycja:** Kliknij "Edytuj" przy wybranej stronie
-4. **Tabs językowe:** Przełączaj między PL/EN/DE
-5. **Zapisz:** Wszystkie zmiany zapisują się jednocześnie
-6. **Podgląd:** Otwórz stronę w nowej karcie
-7. **Wyczyść cache:** Po zapisaniu, aby zobaczyć zmiany
-8. **Eksport:** Pobierz pliki .ts do synchronizacji z kodem
+2. **Dashboard:** Wybierz stronę do edycji
+3. **Edytor:** Przełączaj języki (PL/EN/DE), edytuj teksty
+4. **Zapisz:** Wszystkie zmiany zapisują się jednocześnie
+5. **Wyczyść cache + Podgląd:** Zobacz efekt
 
 ---
 
-## 📂 Kluczowe pliki projektu
+## 🔄 Workflow: Jak dodawać treści do podstron
 
-### Pliki naprawione (awaria strony):
+### Opcja 1: Edycja przez panel admina (90% przypadków)
+
+**Dla prostych zmian tekstowych** (ceny, opisy, poprawki):
+1. Zaloguj się do panelu `/admin/dashboard`
+2. Wybierz stronę (np. "Naprawy")
+3. Edytuj teksty w każdym języku
+4. Kliknij "Zapisz" → "Wyczyść cache" → "Podgląd"
+
+**Ważne:** Zmiany w panelu trafiają do **bazy Supabase**, ale **NIE** do plików statycznych.
+
+### Opcja 2: Edycja przez Claude Code (10% przypadków)
+
+**Dla zmian strukturalnych** (nowe sekcje, layout, funkcjonalności):
+1. Napisz do Claude Code: "Dodaj sekcję XYZ do strony Naprawy"
+2. Claude zmodyfikuje pliki:
+   - `src/locales/pl.ts` - teksty polski
+   - `src/locales/en.ts` - teksty angielski
+   - `src/locales/de.ts` - teksty niemiecki
+   - Opcjonalnie komponenty jeśli trzeba zmienić layout
+3. **WAŻNE:** Po zmianach Claude uruchom migrację:
+   ```bash
+   npm run migrate:translations
+   ```
+   To zaktualizuje bazę Supabase nowymi kluczami
+
+### Synchronizacja: Panel ↔ Kod
+
+**Panel → Kod (eksport do plików):**
+1. W panelu kliknij "Eksportuj do plików"
+2. Pobierz 3 pliki: pl.ts, en.ts, de.ts
+3. Przekaż je programiście/Claude do zastąpienia w `src/locales/`
+
+**Kod → Panel (migracja):**
+1. Po zmianach w plikach `src/locales/*.ts` uruchom:
+   ```bash
+   npm run migrate:translations
+   ```
+2. Potwierdź migrację (Enter)
+3. Tłumaczenia trafiają do bazy Supabase
+4. Panel automatycznie je wykryje
+
+---
+
+## 🗂️ Kluczowe pliki projektu
+
+### Baza danych (Supabase)
 ```
-scripts/
-└── migrate-translations.ts          ← ✅ NAPRAWIONO (format kluczy [index])
-
-src/lib/
-└── translations.ts                  ← ✅ NAPRAWIONO (setValue z parserem)
-
-src/contexts/
-└── LanguageContext.tsx              ← ✅ PRZYWRÓCONO (Supabase enabled)
-
-src/components/
-└── ErrorBoundary.tsx                ← ✅ DODANO (debugging)
-
-src/pages/
-└── Index.tsx                        ← ✅ DODANO (Error Boundary wrapper)
-```
-
-### Baza danych:
-```
-Supabase: dwrwrvxcbkmdlilmzxig.supabase.co
+Projekt: dwrwrvxcbkmdlilmzxig.supabase.co
 Tabele:
-  - translations (212 rekordów) ✅
-  - page_contents (0 rekordów)
-  - admin_users (1 admin: djdrax@gmail.com) ✅
+  - translations (212 rekordów) - wszystkie tłumaczenia
+  - page_contents (puste) - treści dynamiczne podstron
+  - admin_users (1 admin) - djdrax@gmail.com
 
 Migracje:
-  - 001_create_admin_tables.sql ✅
-  - 002_fix_rls_policies.sql ✅
+  - 001_create_admin_tables.sql
+  - 002_fix_rls_policies.sql
+```
+
+### Panel admina
+```
+src/pages/admin/
+├── Login.tsx           - Logowanie
+├── Dashboard.tsx       - Grid z przyciskami stron
+└── PageEditor.tsx      - Edytor tekstów (tabs PL/EN/DE)
+
+src/lib/
+├── pageStructure.ts    - Mapowanie stron do kluczy tłumaczeń
+└── translations.ts     - Funkcje: buildTranslationsObject(), cache
+```
+
+### Tłumaczenia
+```
+src/locales/
+├── pl.ts               - Statyczne tłumaczenia polski (fallback)
+├── en.ts               - Statyczne tłumaczenia angielski (fallback)
+└── de.ts               - Statyczne tłumaczenia niemiecki (fallback)
+
+scripts/
+└── migrate-translations.ts  - Migracja plików → Supabase
+```
+
+### Frontend
+```
+src/contexts/
+└── LanguageContext.tsx  - Pobiera tłumaczenia z Supabase + cache (1h)
+
+src/pages/service/
+├── Repairs.tsx          - Podstrona "Naprawy" (używa page_contents lub fallback)
+├── Mounting.tsx         - Podstrona "Montaż"
+└── ServiceContract.tsx  - Podstrona "Umowa serwisowa"
+
+src/pages/products/
+├── Rims.tsx             - Podstrona "Felgi"
+└── Regeneration.tsx     - Podstrona "Regeneracja"
 ```
 
 ---
 
-## 🔄 Jak wznowić pracę
+## 🛠️ Typowe zadania dla Claude Code
 
-### Opcja 1: Kontynuuj panel (Wariant A)
+### 1. Dodanie nowej sekcji do strony
 ```
-Przeprojektuj panel administracyjny według Wariantu A.
-Plan znajduje się w WORK_IN_PROGRESS.md sekcja PRIORYTET 2.
+Dodaj sekcję "Cennik" do strony Naprawy z następującymi tekstami:
+- Nagłówek: "Nasze ceny"
+- Opis: "Konkurencyjne ceny napraw"
+- Lista 3 usług z cenami
+Pamiętaj o wszystkich 3 językach i uruchom migrację.
 ```
 
-### Opcja 2: Testowanie i dopracowanie
+### 2. Zmiana layoutu strony
 ```
-Przetestuj panel admina:
-- Czy edycja tłumaczeń działa poprawnie?
-- Czy zmiany są widoczne na stronie po odświeżeniu?
-- Czy cache działa (zmiany widoczne natychmiast vs po 1h)?
+Zmień układ sekcji na stronie O nas:
+- Przenieś sekcję "Zespół" nad "Misja"
+- Dodaj zdjęcia do karetek zespołu
+Zaktualizuj komponenty i migrację.
 ```
+
+### 3. Dodanie nowej strony
+```
+Dodaj nową stronę "Kontakt" z formularzem.
+Dodaj ją do pageStructure.ts i routingu.
+Stwórz komponenty i migrację tłumaczeń.
+```
+
+### 4. Naprawa błędów
+```
+Strona Naprawy nie wyświetla się poprawnie.
+Sprawdź komponenty, tłumaczenia i console.
+```
+
+---
+
+## 🔧 Rozwiązywanie problemów
+
+### Panel nie pokazuje zmian
+1. Kliknij "Wyczyść cache" w panelu
+2. Odśwież stronę (F5 lub Ctrl+F5)
+3. Sprawdź czy migracja została uruchomiona po zmianach w plikach
+
+### Strona pokazuje stare teksty
+1. Cache localStorage (1h) - poczekaj lub wyczyść:
+   ```javascript
+   localStorage.clear(); location.reload();
+   ```
+2. Cache przeglądarki - Ctrl+Shift+R
+
+### Błąd "map is not a function"
+- Problem z tablicami w buildTranslationsObject
+- Sprawdź format kluczy w bazie: `items[0].title` (z nawiasami)
+- Uruchom ponownie migrację
+
+### Panel nie zapisuje zmian
+- Sprawdź połączenie z internetem
+- Sprawdź RLS policies w Supabase (is_admin() function)
+- Sprawdź czy admin jest w tabeli admin_users
+
+---
+
+## 💾 Backup i przywracanie
+
+### Backup tłumaczeń
+```bash
+# Eksportuj z panelu "Eksportuj do plików"
+# LUB pobierz bezpośrednio z Supabase
+```
+
+### Przywracanie z plików statycznych
+Jeśli baza Supabase jest niedostępna, strona automatycznie użyje fallbacku z `src/locales/*.ts`
 
 ---
 
@@ -237,69 +210,19 @@ Przetestuj panel admina:
 
 **✅ Działające:**
 - Strona główna i wszystkie podstrony
-- Panel admina (logowanie, dashboard, edytory)
+- Panel admina (Wariant A)
 - Baza danych Supabase (212 tłumaczeń)
 - Integracja Supabase ↔ Frontend
 - Cache localStorage (1 godzina)
-- RLS policies (is_admin() function)
+- Eksport/import tłumaczeń
 
-**✅ Zrobione niedawno:**
-- ✅ Przeprojektowanie panelu na Wariant A (prostsze UI)
-- ✅ Funkcja eksportu do plików
-- ✅ Przycisk "Wyczyść cache"
-- ✅ Usunięcie starych komponentów panelu
-- ✅ Poprawki UX: czytelne czcionki i rozszerzone wskazówki
-
----
-
-## 🔧 Poprawki UX panelu (2025-12-29)
-
-### Problem: Nieczytelne czcionki
-**Objawy:** Tytuły stron (INDEX, REGENERACJA, etc.) wyświetlane pogrubionym fontem Bebas Neue w uppercase
-
-**Rozwiązanie:**
-1. Zmieniono czcionkę kart stron z `Bebas Neue` (font-display) na `Inter` (font-sans)
-2. Dodano klasę `normal-case` do CardTitle w Dashboard
-3. Zmieniono wszystkie nagłówki panelu na `font-sans`
-
-**Pliki zmienione:**
-- `src/pages/admin/Dashboard.tsx` - CardTitle z `font-sans normal-case`
-- `src/pages/admin/PageEditor.tsx` - wszystkie nagłówki `font-sans`
-
-### Rozszerzone wskazówki dla początkującego admina
-
-**Dodano w Dashboard.tsx:**
-- Card z Accordion "Jak korzystać z panelu"
-  - 🎯 Jak edytować treść strony? (6 kroków)
-  - 💡 Ważne wskazówki (6 punktów)
-  - 🆘 Co zrobić gdy coś nie działa? (4 rozwiązania)
-
-**Dodano w PageEditor.tsx:**
-- Alert z wskazówkami na górze edytora (4 punkty)
-- Tooltips na przyciskach:
-  - "Podgląd" → "Otwiera stronę w nowej karcie"
-  - "Wyczyść cache" → "Usuwa cache aby zobaczyć najnowsze zmiany"
-  - "Zapisz" → "Zapisuje wszystkie edytowane teksty"
-- Wykrywanie niezapisanych zmian:
-  - Ostrzeżenie przeglądarki przy opuszczaniu strony
-  - Wizualna zmiana przycisku "Zapisz"
-
-**Status:** ✅ Panel przyjazny dla początkujących
-
----
-
-## 💾 Ostatnie commity
-
-```
-(następny) - Napraw czcionki na kartach stron (font-sans normal-case)
-9df4c17 - Poprawa UX panelu: czytelniejsze czcionki i rozszerzone wskazówki
-10cfd51 - Aktualizuj dokumentację - Wariant A ukończony
-22b34b0 - Przeprojektuj panel administracyjny według Wariantu A
-4df722e - Napraw krytyczną awarię strony głównej i przywróć Supabase
-```
+**📌 Repozytorium:**
+- GitHub: https://github.com/Nobodyy88/uncover-your-magic.git
+- Branch: main
+- Ostatni commit: e782c95
 
 ---
 
 **KONIEC DOKUMENTU**
 
-✅ Strona działa! Panel admina działa z czytelnymi czcionkami i szczegółowymi wskazówkami! 🎉
+Panel gotowy! Strona działa! Można używać! 🎉
