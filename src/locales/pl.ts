@@ -29,7 +29,7 @@ export const pl = {
     headline1: "Wprawiamy Twój biznes w ruch.",
     headline2: "Solidne opony.",
     headline2b: "Pewny plac budowy.",
-    headline3: "Sprzedaż, wymiana i montaż na miejscu",
+    headline3: "Specjalizujemy się w dostawie i montażu opon do maszyn budowlanych – koparki, ładowarki, wywrotki i inny sprzęt ciężki. Dostarczymy odpowiednie opony i zamontujemy je w wybranym przez Ciebie miejscu i czasie.",
     ctaPrimary: "Umów bezpłatną wycenę",
     ctaSecondary: "Zobacz nasze realizacje",
     features: {

@@ -31,7 +31,7 @@ export const de: Translations = {
     headline1: "Wir bringen Ihr Geschäft in Bewegung.",
     headline2: "Solide Reifen.",
     headline2b: "Sichere Baustelle.",
-    headline3: "Verkauf, Austausch und Montage vor Ort",
+    headline3: "Wir sind spezialisiert auf Lieferung und Montage von Reifen für Baumaschinen – Bagger, Radlader, Muldenkipper und andere Schwerlastfahrzeuge. Wir liefern die passenden Reifen und montieren sie an Ihrem gewünschten Ort und zur gewünschten Zeit.",
     ctaPrimary: "Kostenloses Angebot anfordern",
     ctaSecondary: "Unsere Projekte ansehen",
     features: {

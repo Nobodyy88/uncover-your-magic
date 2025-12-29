@@ -31,7 +31,7 @@ export const en: Translations = {
     headline1: "We put your business in motion.",
     headline2: "Solid tires.",
     headline2b: "Reliable construction site.",
-    headline3: "Sales, replacement and on-site installation",
+    headline3: "We specialize in delivery and installation of tires for construction machinery – excavators, loaders, dump trucks and other heavy equipment. We will deliver the right tires and install them at your chosen location and time.",
     ctaPrimary: "Get a free quote",
     ctaSecondary: "See our projects",
     features: {
