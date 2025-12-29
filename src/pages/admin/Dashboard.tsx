@@ -1,7 +1,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Download, Trash2, ExternalLink } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { LogOut, Download, Trash2, ExternalLink, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getAllPages } from '@/lib/pageStructure';
 import { supabase } from '@/integrations/supabase/client';
@@ -137,7 +138,7 @@ const Dashboard = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="font-display text-2xl">Panel Administracyjny</h1>
+            <h1 className="font-sans text-xl font-semibold">Panel Administracyjny</h1>
             <p className="text-sm text-muted-foreground">WM Tyres</p>
           </div>
           <div className="flex items-center gap-4">
@@ -156,7 +157,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="font-display text-3xl mb-2">Edycja stron</h2>
+          <h2 className="font-sans text-2xl font-semibold mb-2">Edycja stron</h2>
           <p className="text-muted-foreground">
             Wybierz stronę do edycji tekstów w trzech językach (PL/EN/DE)
           </p>
@@ -182,6 +183,59 @@ const Dashboard = () => {
             Wyczyść cache
           </Button>
         </div>
+
+        {/* Instrukcja obsługi */}
+        <Card className="mb-8 bg-blue-50/50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Info className="w-5 h-5" />
+              Jak korzystać z panelu
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="howto">
+                <AccordionTrigger>🎯 Jak edytować treść strony?</AccordionTrigger>
+                <AccordionContent>
+                  <ol className="list-decimal ml-5 space-y-2">
+                    <li>Kliknij przycisk "Edytuj" przy wybranej stronie</li>
+                    <li>Przełączaj zakładki językowe (Polski/English/Deutsch)</li>
+                    <li>Edytuj teksty w polach formularza</li>
+                    <li>Kliknij "Zapisz wszystkie zmiany"</li>
+                    <li>Kliknij "Wyczyść cache" aby zobaczyć efekt</li>
+                    <li>Kliknij "Podgląd" aby sprawdzić stronę</li>
+                  </ol>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="tips">
+                <AccordionTrigger>💡 Ważne wskazówki</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="list-disc ml-5 space-y-2">
+                    <li><strong>Zawsze</strong> zapisuj zmiany przed zamknięciem edytora</li>
+                    <li><strong>Nie</strong> zostawiaj pustych pól - wpisz "-" jeśli pole nie jest potrzebne</li>
+                    <li><strong>Sprawdź</strong> literówki przed zapisaniem</li>
+                    <li><strong>Testuj</strong> zmiany na podglądzie</li>
+                    <li><strong>Wyczyść cache</strong> po każdym zapisie</li>
+                    <li><strong>Zachowaj</strong> spójność tłumaczeń we wszystkich językach</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="help">
+                <AccordionTrigger>🆘 Co zrobić gdy coś nie działa?</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="list-disc ml-5 space-y-2">
+                    <li>Nie widzisz zmian → Wyczyść cache + odśwież stronę (Ctrl+F5)</li>
+                    <li>Panel nie zapisuje → Sprawdź połączenie z internetem</li>
+                    <li>Zgubiłaś/eś się → Kliknij "Dashboard" w menu</li>
+                    <li>Masz pytania → Skontaktuj się z programistą</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </CardContent>
+        </Card>
 
         {/* Pages Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

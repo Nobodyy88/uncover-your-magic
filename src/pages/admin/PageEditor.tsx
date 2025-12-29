@@ -10,8 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LogOut, Save, ArrowLeft, Eye, Trash2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { LogOut, Save, ArrowLeft, Eye, Trash2, Info } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { getPageById } from '@/lib/pageStructure';
 import type { Database } from '@/integrations/supabase/types';
@@ -32,6 +33,7 @@ const PageEditor = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'pl' | 'en' | 'de'>('pl');
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const pageConfig = pageId ? getPageById(pageId) : null;
 
@@ -88,6 +90,18 @@ const PageEditor = () => {
     }
   }, [translations, pageConfig]);
 
+  // Wykrywanie niezapisanych zmian przy opuszczaniu strony
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
   // Mutation do zapisu
   const saveMutation = useMutation({
     mutationFn: async (data: Record<string, { pl: string; en: string; de: string }>) => {
@@ -115,6 +129,7 @@ const PageEditor = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['page-translations', pageId] });
+      setHasUnsavedChanges(false);
       toast({
         title: 'Zapisano',
         description: 'Wszystkie zmiany zostały zapisane w bazie danych',
@@ -167,6 +182,7 @@ const PageEditor = () => {
         [lang]: value,
       },
     }));
+    setHasUnsavedChanges(true);
   };
 
   // Funkcja do formatowania nazwy klucza
@@ -216,43 +232,70 @@ const PageEditor = () => {
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="font-display text-2xl">Panel Administracyjny</h1>
+            <h1 className="font-sans text-xl font-semibold">Panel Administracyjny</h1>
             <p className="text-sm text-muted-foreground">WM Tyres</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={handlePreview}
-              size="sm"
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              Podgląd
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleClearCache}
-              size="sm"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Wyczyść cache
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={saveMutation.isPending}
-              size="sm"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {saveMutation.isPending ? 'Zapisywanie...' : 'Zapisz'}
-            </Button>
-            <div className="text-right ml-4">
-              <p className="text-sm font-medium">{user?.email}</p>
-              <p className="text-xs text-muted-foreground">Administrator</p>
+          <TooltipProvider>
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handlePreview}
+                    size="sm"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Podgląd
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Otwiera stronę w nowej karcie</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handleClearCache}
+                    size="sm"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Wyczyść cache
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Usuwa cache aby zobaczyć najnowsze zmiany na stronie</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={handleSave}
+                    disabled={saveMutation.isPending}
+                    size="sm"
+                    variant={hasUnsavedChanges ? 'default' : 'outline'}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    {saveMutation.isPending ? 'Zapisywanie...' : hasUnsavedChanges ? 'Zapisz zmiany' : 'Zapisz'}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Zapisuje wszystkie edytowane teksty w bazie danych</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <div className="text-right ml-4">
+                <p className="text-sm font-medium">{user?.email}</p>
+                <p className="text-xs text-muted-foreground">Administrator</p>
+              </div>
+              <Button variant="outline" onClick={handleSignOut} size="sm">
+                <LogOut className="w-4 h-4 mr-2" />
+                Wyloguj
+              </Button>
             </div>
-            <Button variant="outline" onClick={handleSignOut} size="sm">
-              <LogOut className="w-4 h-4 mr-2" />
-              Wyloguj
-            </Button>
-          </div>
+          </TooltipProvider>
         </div>
       </header>
 
@@ -267,11 +310,25 @@ const PageEditor = () => {
         </div>
 
         <div className="mb-8">
-          <h2 className="font-display text-3xl mb-2">{pageConfig.title}</h2>
+          <h2 className="font-sans text-2xl font-semibold mb-2">{pageConfig.title}</h2>
           <p className="text-muted-foreground">
             Edytuj teksty w trzech językach (PL/EN/DE)
           </p>
         </div>
+
+        {/* Wskazówki dla edycji */}
+        <Alert className="mb-6 bg-blue-50/50 border-blue-200">
+          <Info className="h-4 w-4" />
+          <AlertTitle>Wskazówki dla edycji</AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc ml-5 mt-2 space-y-1">
+              <li>Edytuj teksty w każdym języku osobno (przełączaj zakładki PL/EN/DE)</li>
+              <li>Zmiany zapisują się wszystkie naraz po kliknięciu "Zapisz"</li>
+              <li>Po zapisaniu <strong>kliknij "Wyczyść cache"</strong> aby zobaczyć efekt na stronie</li>
+              <li>Użyj "Podgląd" aby sprawdzić stronę przed publikacją</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
 
         {/* Error State */}
         {error && (
@@ -319,7 +376,7 @@ const PageEditor = () => {
                       <div key={section.name} className="mb-8">
                         {/* Sekcja Header */}
                         <div className="mb-4 pb-2 border-b">
-                          <h3 className="font-display text-xl text-primary">{section.name}</h3>
+                          <h3 className="font-sans text-lg font-semibold text-primary">{section.name}</h3>
                         </div>
 
                         {/* Pola sekcji */}
