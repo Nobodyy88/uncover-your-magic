@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      page_contents: {
+        Row: {
+          content_de: Json | null
+          content_en: Json | null
+          content_pl: Json | null
+          created_at: string
+          id: string
+          is_published: boolean
+          page_slug: string
+          subtitle_de: string | null
+          subtitle_en: string | null
+          subtitle_pl: string | null
+          title_de: string | null
+          title_en: string | null
+          title_pl: string | null
+          updated_at: string
+        }
+        Insert: {
+          content_de?: Json | null
+          content_en?: Json | null
+          content_pl?: Json | null
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          page_slug: string
+          subtitle_de?: string | null
+          subtitle_en?: string | null
+          subtitle_pl?: string | null
+          title_de?: string | null
+          title_en?: string | null
+          title_pl?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content_de?: Json | null
+          content_en?: Json | null
+          content_pl?: Json | null
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          page_slug?: string
+          subtitle_de?: string | null
+          subtitle_en?: string | null
+          subtitle_pl?: string | null
+          title_de?: string | null
+          title_en?: string | null
+          title_pl?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      translations: {
+        Row: {
+          array_index: number | null
+          category: string
+          is_array: boolean
+          key: string
+          parent_key: string | null
+          updated_at: string
+          value_de: string
+          value_en: string
+          value_pl: string
+        }
+        Insert: {
+          array_index?: number | null
+          category?: string
+          is_array?: boolean
+          key: string
+          parent_key?: string | null
+          updated_at?: string
+          value_de?: string
+          value_en?: string
+          value_pl?: string
+        }
+        Update: {
+          array_index?: number | null
+          category?: string
+          is_array?: boolean
+          key?: string
+          parent_key?: string | null
+          updated_at?: string
+          value_de?: string
+          value_en?: string
+          value_pl?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
