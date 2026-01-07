@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const ServiceContract = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-
+  const [logoError, setLogoError] = useState(false);
   const handleContactClick = () => {
     navigate("/");
     setTimeout(() => {
@@ -124,20 +125,19 @@ const ServiceContract = () => {
               </p>
             </div>
             <div className="flex justify-center items-center">
-              <img
-                src="/images/wm-tyres-logo-large.png"
-                alt="WM Tyres Logo"
-                className="max-w-[300px] h-auto"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML = `
-                    <div class="text-center">
-                      <span class="font-display text-6xl md:text-8xl text-primary">WM</span>
-                      <span class="font-display text-4xl md:text-6xl text-white block">TYRES</span>
-                    </div>
-                  `;
-                }}
-              />
+              {!logoError ? (
+                <img
+                  src="/images/wm-tyres-logo-large.png"
+                  alt="WM Tyres Logo"
+                  className="max-w-[300px] h-auto"
+                  onError={() => setLogoError(true)}
+                />
+              ) : (
+                <div className="text-center">
+                  <span className="font-display text-6xl md:text-8xl text-primary">WM</span>
+                  <span className="font-display text-4xl md:text-6xl text-white block">TYRES</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
