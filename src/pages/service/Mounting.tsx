@@ -33,7 +33,7 @@ const Mounting = () => {
       ) : pageContent ? (
         <div className="pt-32">
           <DynamicPageRenderer
-            content={pageContent[`content_${language}`] as { sections?: Array<{ type: string }> } | null}
+            content={pageContent[`content_${language}`] as { sections?: Array<{ type: 'hero' | 'features' | 'text'; title?: string; description?: string; image?: string; ctaText?: string; ctaLink?: string; items?: Array<{ title: string; description: string }>; content?: string; className?: string }> } | null}
             title={pageContent[`title_${language}`] || undefined}
             subtitle={pageContent[`subtitle_${language}`] || undefined}
           />
