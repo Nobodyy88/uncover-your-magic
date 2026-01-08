@@ -80,6 +80,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          count: number
+          ip: string
+          last_reset: number
+        }
+        Insert: {
+          count?: number
+          ip: string
+          last_reset?: number
+        }
+        Update: {
+          count?: number
+          ip?: string
+          last_reset?: number
+        }
+        Relationships: []
+      }
       translations: {
         Row: {
           array_index: number | null
