@@ -5,9 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-// URL webhooka n8n - ustaw w pliku .env jako VITE_N8N_WEBHOOK_URL
-const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -30,28 +28,16 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Sprawdź czy webhook URL jest skonfigurowany
-      if (!N8N_WEBHOOK_URL) {
-        console.error("N8N_WEBHOOK_URL nie jest skonfigurowany");
-        throw new Error("Webhook URL not configured");
-      }
-
-      // Wyślij dane do webhooka n8n
-      const response = await fetch(N8N_WEBHOOK_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // Wyślij dane przez bezpieczną funkcję serwera
+      const { data, error } = await supabase.functions.invoke('contact-webhook', {
+        body: {
           ...formData,
           language,
-          timestamp: new Date().toISOString(),
-          source: "wmtyres-website",
-        }),
+        },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw error;
       }
 
       // Sukces
