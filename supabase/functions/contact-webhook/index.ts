@@ -1,9 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Rate limit configuration
+const RATE_LIMIT_MAX_REQUESTS = 5; // Max requests per window
+const RATE_LIMIT_WINDOW_MS = 3600000; // 1 hour in milliseconds
 
 // Simple validation schema
 function validateContactForm(data: unknown): { valid: boolean; errors: string[] } {
@@ -52,6 +57,87 @@ function validateContactForm(data: unknown): { valid: boolean; errors: string[] 
   return { valid: errors.length === 0, errors };
 }
 
+// Rate limit data interface
+interface RateLimitData {
+  ip: string;
+  count: number;
+  last_reset: number;
+}
+
+// Rate limiting function using Supabase
+async function checkRateLimit(supabaseAdmin: any, ip: string): Promise<{ allowed: boolean; remainingRequests: number }> {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW_MS;
+  
+  try {
+    // Get current rate limit entry for this IP
+    const { data, error } = await supabaseAdmin
+      .from('rate_limits')
+      .select('count, last_reset')
+      .eq('ip', ip)
+      .maybeSingle();
+    
+    if (error) {
+      console.error('Rate limit check error:', error);
+      // Allow request on error to prevent blocking legitimate users
+      return { allowed: true, remainingRequests: RATE_LIMIT_MAX_REQUESTS };
+    }
+    
+    const rateLimitData = data as RateLimitData | null;
+    
+    // If no entry exists or window has expired, create/reset
+    if (!rateLimitData || rateLimitData.last_reset < windowStart) {
+      await supabaseAdmin
+        .from('rate_limits')
+        .upsert({
+          ip,
+          count: 1,
+          last_reset: now
+        }, { onConflict: 'ip' });
+      
+      return { allowed: true, remainingRequests: RATE_LIMIT_MAX_REQUESTS - 1 };
+    }
+    
+    // Check if rate limit exceeded
+    if (rateLimitData.count >= RATE_LIMIT_MAX_REQUESTS) {
+      const resetTime = new Date(rateLimitData.last_reset + RATE_LIMIT_WINDOW_MS);
+      console.log(`Rate limit exceeded for IP ${ip}. Resets at ${resetTime.toISOString()}`);
+      return { allowed: false, remainingRequests: 0 };
+    }
+    
+    // Increment counter
+    await supabaseAdmin
+      .from('rate_limits')
+      .update({ count: rateLimitData.count + 1 })
+      .eq('ip', ip);
+    
+    return { allowed: true, remainingRequests: RATE_LIMIT_MAX_REQUESTS - rateLimitData.count - 1 };
+  } catch (err) {
+    console.error('Rate limit error:', err);
+    // Allow on error to prevent blocking
+    return { allowed: true, remainingRequests: RATE_LIMIT_MAX_REQUESTS };
+  }
+}
+
+// Get client IP from request headers
+function getClientIP(req: Request): string {
+  // Check standard headers in order of preference
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    // x-forwarded-for can be a comma-separated list, take the first one
+    return forwardedFor.split(',')[0].trim();
+  }
+  
+  const realIP = req.headers.get('x-real-ip');
+  if (realIP) {
+    return realIP.trim();
+  }
+  
+  // Fallback to a hash of user-agent + timestamp if no IP available
+  const userAgent = req.headers.get('user-agent') || 'unknown';
+  return `unknown-${userAgent.substring(0, 20)}`;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -59,6 +145,42 @@ serve(async (req) => {
   }
 
   try {
+    // Initialize Supabase admin client for rate limiting
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Supabase configuration missing');
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // Get client IP and check rate limit
+    const clientIP = getClientIP(req);
+    const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIP);
+    
+    if (!rateLimitResult.allowed) {
+      console.log(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'Retry-After': String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000))
+          } 
+        }
+      );
+    }
+
     const webhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
     
     if (!webhookUrl) {
@@ -113,7 +235,13 @@ serve(async (req) => {
     
     return new Response(
       JSON.stringify({ success: true }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Remaining': String(rateLimitResult.remainingRequests)
+        } 
+      }
     );
 
   } catch (error) {
