@@ -7,10 +7,18 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ValidationErrors {
+  name?: string;
+  phone?: string;
+  email?: string;
+  message?: string;
+}
+
 const ContactForm = () => {
   const { toast } = useToast();
   const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -19,12 +27,47 @@ const ContactForm = () => {
     message: "",
   });
 
+  const validateForm = (): boolean => {
+    const newErrors: ValidationErrors = {};
+    
+    if (formData.name.trim().length < 2) {
+      newErrors.name = t.contact.validation.nameMinLength;
+    }
+    
+    if (formData.phone.trim().length < 6) {
+      newErrors.phone = t.contact.validation.phoneMinLength;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = t.contact.validation.emailInvalid;
+    }
+    
+    if (formData.message.trim().length < 10) {
+      newErrors.message = t.contact.validation.messageMinLength;
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Clear error when user starts typing
+    if (errors[name as keyof ValidationErrors]) {
+      setErrors({ ...errors, [name]: undefined });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -48,6 +91,7 @@ const ContactForm = () => {
 
       // Wyczyść formularz
       setFormData({ name: "", phone: "", email: "", machine: "", message: "" });
+      setErrors({});
 
     } catch (error) {
       console.error("Błąd wysyłania formularza:", error);
@@ -145,8 +189,11 @@ const ContactForm = () => {
                     onChange={handleChange}
                     placeholder={t.contact.form.name.placeholder}
                     required
-                    className="bg-secondary border-border"
+                    className={`bg-secondary border-border ${errors.name ? 'border-destructive' : ''}`}
                   />
+                  {errors.name && (
+                    <p className="text-destructive text-sm mt-1">{errors.name}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
@@ -160,8 +207,11 @@ const ContactForm = () => {
                     onChange={handleChange}
                     placeholder={t.contact.form.phone.placeholder}
                     required
-                    className="bg-secondary border-border"
+                    className={`bg-secondary border-border ${errors.phone ? 'border-destructive' : ''}`}
                   />
+                  {errors.phone && (
+                    <p className="text-destructive text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
               </div>
 
@@ -178,8 +228,11 @@ const ContactForm = () => {
                     onChange={handleChange}
                     placeholder={t.contact.form.email.placeholder}
                     required
-                    className="bg-secondary border-border"
+                    className={`bg-secondary border-border ${errors.email ? 'border-destructive' : ''}`}
                   />
+                  {errors.email && (
+                    <p className="text-destructive text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="machine" className="block text-sm font-medium text-foreground mb-2">
@@ -208,8 +261,11 @@ const ContactForm = () => {
                   placeholder={t.contact.form.message.placeholder}
                   rows={5}
                   required
-                  className="bg-secondary border-border resize-none"
+                  className={`bg-secondary border-border resize-none ${errors.message ? 'border-destructive' : ''}`}
                 />
+                {errors.message && (
+                  <p className="text-destructive text-sm mt-1">{errors.message}</p>
+                )}
               </div>
 
               <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
