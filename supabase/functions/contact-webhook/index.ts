@@ -214,12 +214,23 @@ serve(async (req) => {
       timestamp: new Date().toISOString(),
     };
 
-    // Forward to n8n webhook
+    // Forward to n8n webhook with Cloudflare Access Service Token
+    const cfAccessClientId = Deno.env.get('CF_ACCESS_CLIENT_ID');
+    const cfAccessClientSecret = Deno.env.get('CF_ACCESS_CLIENT_SECRET');
+    
+    const webhookHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add Cloudflare Access headers if configured
+    if (cfAccessClientId && cfAccessClientSecret) {
+      webhookHeaders['CF-Access-Client-Id'] = cfAccessClientId;
+      webhookHeaders['CF-Access-Client-Secret'] = cfAccessClientSecret;
+    }
+    
     const response = await fetch(webhookUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: webhookHeaders,
       body: JSON.stringify(sanitizedData),
     });
 
