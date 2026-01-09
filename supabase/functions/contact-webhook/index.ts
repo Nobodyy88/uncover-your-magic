@@ -211,7 +211,7 @@ serve(async (req) => {
       name: String(body.name).trim().slice(0, 100),
       phone: String(body.phone).trim().slice(0, 20),
       email: String(body.email).trim().toLowerCase().slice(0, 255),
-      machine: body.machine ? String(body.machine).trim().slice(0, 200) : '',
+      machineType: body.machine ? String(body.machine).trim().slice(0, 200) : '',
       message: String(body.message).trim().slice(0, 2000),
       language: body.language && ['pl', 'en', 'de'].includes(body.language) ? body.language : 'pl',
       timestamp: new Date().toISOString(),
