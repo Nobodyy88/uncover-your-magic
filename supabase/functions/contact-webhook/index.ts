@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 // Rate limit configuration
-const RATE_LIMIT_MAX_REQUESTS = 5; // Max requests per window
+const RATE_LIMIT_MAX_REQUESTS = 50; // Max requests per window
 const RATE_LIMIT_WINDOW_MS = 3600000; // 1 hour in milliseconds
 
 // Simple validation schema
