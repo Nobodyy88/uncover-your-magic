@@ -205,6 +205,12 @@ export const en: Translations = {
       errorTitle: "Sending failed",
       errorDescription: "Failed to send message. Please try again later or call us.",
     },
+    validation: {
+      nameMinLength: "Name must be at least 2 characters",
+      phoneMinLength: "Phone must be at least 6 characters",
+      emailInvalid: "Please enter a valid email address",
+      messageMinLength: "Message must be at least 10 characters",
+    },
   },
   brands: {
     label: "Trusted brands",

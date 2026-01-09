@@ -203,6 +203,12 @@ export const pl = {
       errorTitle: "Błąd wysyłania",
       errorDescription: "Nie udało się wysłać wiadomości. Spróbuj ponownie później lub zadzwoń do nas.",
     },
+    validation: {
+      nameMinLength: "Imię musi mieć co najmniej 2 znaki",
+      phoneMinLength: "Telefon musi mieć co najmniej 6 znaków",
+      emailInvalid: "Podaj poprawny adres email",
+      messageMinLength: "Wiadomość musi mieć co najmniej 10 znaków",
+    },
   },
   brands: {
     label: "Zaufane marki",

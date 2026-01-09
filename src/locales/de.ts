@@ -205,6 +205,12 @@ export const de: Translations = {
       errorTitle: "Sendefehler",
       errorDescription: "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut oder rufen Sie uns an.",
     },
+    validation: {
+      nameMinLength: "Der Name muss mindestens 2 Zeichen lang sein",
+      phoneMinLength: "Die Telefonnummer muss mindestens 6 Zeichen lang sein",
+      emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      messageMinLength: "Die Nachricht muss mindestens 10 Zeichen lang sein",
+    },
   },
   brands: {
     label: "Vertrauenswürdige Marken",
