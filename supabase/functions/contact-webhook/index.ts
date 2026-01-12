@@ -161,27 +161,25 @@ serve(async (req) => {
     
     // Get client IP and check rate limit
     const clientIP = getClientIP(req);
-    // TEMPORARILY DISABLED FOR TESTING - Rate limiting disabled
-    // const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIP);
-    const rateLimitResult = { allowed: true, remainingRequests: RATE_LIMIT_MAX_REQUESTS };
+    const rateLimitResult = await checkRateLimit(supabaseAdmin, clientIP);
 
-    // if (!rateLimitResult.allowed) {
-    //   console.log(`Rate limit exceeded for IP: ${clientIP}`);
-    //   return new Response(
-    //     JSON.stringify({
-    //       error: 'Too many requests. Please try again later.',
-    //       retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)
-    //     }),
-    //     {
-    //       status: 429,
-    //       headers: {
-    //         ...corsHeaders,
-    //         'Content-Type': 'application/json',
-    //         'Retry-After': String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000))
-    //       }
-    //     }
-    //   );
-    // }
+    if (!rateLimitResult.allowed) {
+      console.log(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)
+        }),
+        {
+          status: 429,
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+            'Retry-After': String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000))
+          }
+        }
+      );
+    }
 
     const webhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
     
