@@ -18,6 +18,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -49,6 +50,43 @@ const Login = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      toast({
+        title: 'Podaj email',
+        description: 'Wpisz adres email, na który wyślemy link do resetowania hasła.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsResetting(true);
+
+    try {
+      const redirectUrl = `${window.location.origin}${window.location.pathname}#/admin/reset-password`;
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: redirectUrl,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Email wysłany',
+        description: 'Sprawdź swoją skrzynkę pocztową. Link do resetowania hasła został wysłany.',
+      });
+    } catch (error) {
+      console.error('Błąd resetowania hasła:', error);
+      toast({
+        title: 'Błąd',
+        description: (error as Error).message || 'Nie udało się wysłać emaila z linkiem.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -114,7 +152,18 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-muted-foreground">
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={handleResetPassword}
+              disabled={isResetting}
+              className="text-sm text-primary hover:underline disabled:opacity-50"
+            >
+              {isResetting ? 'Wysyłanie...' : 'Zapomniałeś hasła?'}
+            </button>
+          </div>
+
+          <div className="mt-4 text-center text-sm text-muted-foreground">
             <p>Dostęp tylko dla administratorów</p>
           </div>
         </CardContent>
