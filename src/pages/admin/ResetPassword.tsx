@@ -30,16 +30,14 @@ export default function ResetPassword() {
 
   useEffect(() => {
     const handleRecoveryToken = async () => {
-      // Parsuj hash z URL - obsługa hash-routera
-      // URL ma postać: /#/admin/reset-password#access_token=...&refresh_token=...&type=recovery
-      // Musimy wyciągnąć część po OSTATNIM znaku #
-      const fullHash = window.location.hash;
-      const lastHashIndex = fullHash.lastIndexOf('#');
+      // Parsuj tokeny z URL - obsługa hash-routera
+      // URL ma postać: https://domain/#/admin/reset-password#access_token=...&refresh_token=...&type=recovery
+      // Używamy window.location.href i dzielimy po # żeby wziąć ostatni fragment
+      const fullUrl = window.location.href;
+      const hashParts = fullUrl.split('#');
       
-      // Jeśli jest więcej niż jeden #, weź część po ostatnim
-      const tokenPart = lastHashIndex > 0 
-        ? fullHash.substring(lastHashIndex + 1) 
-        : fullHash.substring(1);
+      // Weź ostatni element tablicy - to są tokeny
+      const tokenPart = hashParts.length > 1 ? hashParts[hashParts.length - 1] : '';
       
       const params = new URLSearchParams(tokenPart);
       
