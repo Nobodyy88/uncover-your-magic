@@ -22,6 +22,7 @@ import Mounting from "./pages/service/Mounting";
 
 // Admin
 import Login from "./pages/admin/Login";
+import ResetPassword from "./pages/admin/ResetPassword";
 import Dashboard from "./pages/admin/Dashboard";
 import PageEditor from "./pages/admin/PageEditor";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
@@ -53,6 +54,7 @@ const App = () => (
 
             {/* Admin */}
             <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/reset-password" element={<ResetPassword />} />
             <Route
               path="/admin/dashboard"
               element={
