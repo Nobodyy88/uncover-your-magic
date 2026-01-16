@@ -57,7 +57,7 @@ const Footer = () => {
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <div className="mb-4">
-              <a href="#/" onClick={handleLogoClick}>
+              <a href="/" onClick={handleLogoClick}>
                 <img
                   src={logo}
                   alt="WM Tyres"
@@ -75,7 +75,7 @@ const Footer = () => {
               {navLinks.map((link) => (
                 <a
                   key={link.href}
-                  href={link.isSection ? `#${link.href}` : `#${link.href}`}
+                  href={link.isSection ? `#${link.href}` : link.href}
                   onClick={(e) => handleNavClick(e, link.href, link.isSection)}
                   className="block text-muted-foreground hover:text-primary transition-colors"
                 >

@@ -79,7 +79,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#/" onClick={handleLogoClick} className="flex items-center">
+          <a href="/" onClick={handleLogoClick} className="flex items-center">
             <img
               src={logo}
               alt="WM Tyres"
@@ -104,7 +104,7 @@ const Header = () => {
                   {productItems.map((item) => (
                     <a
                       key={item.href}
-                      href={`#${item.href}`}
+                      href={item.href}
                       onClick={(e) => handleDropdownItemClick(e, item.href)}
                       className="block px-4 py-2 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
                     >
@@ -130,7 +130,7 @@ const Header = () => {
                   {serviceItems.map((item) => (
                     <a
                       key={item.href}
-                      href={`#${item.href}`}
+                      href={item.href}
                       onClick={(e) => handleDropdownItemClick(e, item.href)}
                       className="block px-4 py-2 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
                     >
@@ -145,7 +145,7 @@ const Header = () => {
             {navLinks.map((link) => (
               <a
                 key={link.href}
-                href={link.isSection ? `#${link.href}` : `#${link.href}`}
+                href={link.isSection ? `#${link.href}` : link.href}
                 onClick={(e) => handleNavClick(e, link.href, link.isSection)}
                 className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium"
               >
@@ -201,7 +201,7 @@ const Header = () => {
                     {productItems.map((item) => (
                       <a
                         key={item.href}
-                        href={`#${item.href}`}
+                        href={item.href}
                         onClick={(e) => handleDropdownItemClick(e, item.href)}
                         className="block text-muted-foreground hover:text-primary transition-colors py-1"
                       >
@@ -226,7 +226,7 @@ const Header = () => {
                     {serviceItems.map((item) => (
                       <a
                         key={item.href}
-                        href={`#${item.href}`}
+                        href={item.href}
                         onClick={(e) => handleDropdownItemClick(e, item.href)}
                         className="block text-muted-foreground hover:text-primary transition-colors py-1"
                       >
@@ -241,7 +241,7 @@ const Header = () => {
               {navLinks.map((link) => (
                 <a
                   key={link.href}
-                  href={link.isSection ? `#${link.href}` : `#${link.href}`}
+                  href={link.isSection ? `#${link.href}` : link.href}
                   onClick={(e) => handleNavClick(e, link.href, link.isSection)}
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium py-2"
                 >
