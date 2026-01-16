@@ -30,16 +30,11 @@ export default function ResetPassword() {
 
   useEffect(() => {
     const handleRecoveryToken = async () => {
-      // Parsuj tokeny z URL - obsługa hash-routera
-      // URL ma postać: https://domain/#/admin/reset-password#access_token=...&refresh_token=...&type=recovery
-      // Używamy window.location.href i dzielimy po # żeby wziąć ostatni fragment
-      const fullUrl = window.location.href;
-      const hashParts = fullUrl.split('#');
-      
-      // Weź ostatni element tablicy - to są tokeny
-      const tokenPart = hashParts.length > 1 ? hashParts[hashParts.length - 1] : '';
-      
-      const params = new URLSearchParams(tokenPart);
+      // Parsuj tokeny z URL - standardowy browser routing
+      // URL ma postać: https://domain/admin/reset-password#access_token=...&refresh_token=...&type=recovery
+      // Supabase dodaje tokeny po znaku # w URL
+      const hash = window.location.hash.substring(1); // usuń początkowy #
+      const params = new URLSearchParams(hash);
       
       const accessToken = params.get('access_token');
       const refreshToken = params.get('refresh_token');
